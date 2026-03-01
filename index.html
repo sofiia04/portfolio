@@ -232,6 +232,82 @@ nav {
 }
 .gallery-count span { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--green-dim); line-height:1; display:block; }
 
+/* ── SHOWCASE (по одній від категорії) ── */
+.showcase-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:16px;
+}
+.showcase-item {
+  position:relative; overflow:hidden; cursor:none;
+  background:var(--surface); aspect-ratio:4/3;
+}
+.showcase-item img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .6s cubic-bezier(.25,.46,.45,.94), filter .4s;
+  filter:saturate(0.85);
+}
+.showcase-item:hover img { transform:scale(1.07); filter:saturate(1.1); }
+
+.showcase-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(14,18,16,.96) 0%, rgba(14,18,16,.2) 50%, transparent 100%);
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:24px 22px;
+  transition:background .35s;
+}
+.showcase-item:hover .showcase-overlay {
+  background:linear-gradient(to top, rgba(14,18,16,.98) 0%, rgba(14,18,16,.4) 60%, rgba(14,18,16,.1) 100%);
+}
+.showcase-cat-label {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--green); margin-bottom:6px;
+}
+.showcase-cat-name {
+  font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300;
+  color:var(--white); line-height:1.15; margin-bottom:12px;
+}
+.showcase-count {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--secondary);
+}
+.showcase-arrow {
+  position:absolute; top:16px; right:16px;
+  width:40px; height:40px; border:1px solid rgba(107,191,114,.35);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s, background .3s, border-color .3s;
+}
+.showcase-item:hover .showcase-arrow { opacity:1; }
+.showcase-item:hover .showcase-arrow { background:var(--green); border-color:var(--green); }
+.showcase-arrow svg { width:16px; height:16px; stroke:var(--bg); fill:none; }
+
+/* кнопка "Pokaż wszystkie" */
+.show-all-wrap {
+  text-align:center; margin-top:48px;
+}
+.btn-show-all {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--bg); background:var(--green);
+  border:none; padding:16px 40px; cursor:none;
+  transition:background .3s, transform .2s; display:inline-block;
+}
+.btn-show-all:hover { background:var(--accent); transform:translateY(-2px); }
+
+/* повна галерея — прихована спочатку */
+.full-gallery-wrap { display:none; }
+.full-gallery-wrap.visible { display:block; }
+.full-gallery-header {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:32px; padding-top:56px;
+}
+.btn-back-showcase {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--secondary); background:none; border:none;
+  cursor:none; display:flex; align-items:center; gap:8px; transition:color .25s;
+}
+.btn-back-showcase:hover { color:var(--green); }
+.btn-back-showcase::before { content:'←'; }
+
 .gallery-grid {
   columns:3; column-gap:16px;
   transition:opacity .3s ease, transform .3s ease;
@@ -602,11 +678,11 @@ footer {
 
   <div class="hero-stats">
     <div class="stat-item">
-      <div class="stat-number">85</div>
+      <div class="stat-number" id="heroCount">—</div>
       <div class="stat-label">Prac w portfolio</div>
     </div>
     <div class="stat-item">
-      <div class="stat-number">10</div>
+      <div class="stat-number" id="heroCats">—</div>
       <div class="stat-label">Kategorii</div>
     </div>
   </div>
@@ -643,22 +719,7 @@ footer {
   </div>
 </div>
 
-<!-- CATEGORIES -->
-<div class="categories" id="categories">
-  <div class="categories-inner">
-    <button class="cat-btn active" data-cat="all">Wszystkie (85)</button>
-    <button class="cat-btn" data-cat="3d">3D (10)</button>
-    <button class="cat-btn" data-cat="digital">Digital (16)</button>
-    <button class="cat-btn" data-cat="malarstwo">Malarstwo (8)</button>
-    <button class="cat-btn" data-cat="rysunek">Rysunek (19)</button>
-    <button class="cat-btn" data-cat="animacja">Animacja (2)</button>
-    <button class="cat-btn" data-cat="logo">Logo (8)</button>
-    <button class="cat-btn" data-cat="plakat">Plakat (6)</button>
-    <button class="cat-btn" data-cat="linoryt">Linoryt (3)</button>
-    <button class="cat-btn" data-cat="rzezba">Rzeźba (9)</button>
-    <button class="cat-btn" data-cat="inne">Inne (4)</button>
-  </div>
-</div>
+<!-- categories moved inside gallery section -->
 
 <!-- GALLERY -->
 <section id="gallery-section">
@@ -667,9 +728,27 @@ footer {
       <div class="section-tag">Portfolio</div>
       <h2 class="section-title">Wybrane<br><em>Prace</em></h2>
     </div>
-    <div class="gallery-count"><span id="countNum">85</span>&nbsp;prac</div>
+    <div class="gallery-count"><span id="countNum">—</span>&nbsp;prac</div>
   </div>
-  <div class="gallery-grid" id="galleryGrid"></div>
+
+  <!-- SHOWCASE: по одній від категорії -->
+  <div class="showcase-grid" id="showcaseGrid"></div>
+  <div class="show-all-wrap">
+    <button class="btn-show-all" id="btnShowAll">Zobacz wszystkie prace</button>
+  </div>
+
+  <!-- ПОВНА ГАЛЕРЕЯ: з'являється після кліку -->
+  <div class="full-gallery-wrap" id="fullGalleryWrap">
+    <div class="full-gallery-header">
+      <button class="btn-back-showcase" id="btnBackShowcase">Powrót do kategorii</button>
+      <div id="fullGalleryTitle" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--secondary);"></div>
+    </div>
+    <!-- фільтри -->
+    <div class="categories" id="categories" style="position:relative;top:auto;margin-bottom:32px;padding:0;">
+      <div class="categories-inner" id="catButtons"></div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </div>
 </section>
 
 <!-- LIGHTBOX -->
@@ -849,111 +928,250 @@ footer {
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── PROJECTS DATA ──────────────────────────────────────────
-const projects = [
-  { id:'1q464T4sbob9uAWefvJzhZrMru-srhnMZ', cat:'3d', catLabel:'3D', title:'Kompozycja Geometryczna I' },
-  { id:'1gfqp3-B-7PhoVtNLAT9loSR9GBfwC-WB', cat:'3d', catLabel:'3D', title:'Kompozycja Geometryczna II' },
-  { id:'1lYJ7Wp-AZjM2rHHIVG59w88tjUGeFgUn', cat:'3d', catLabel:'3D', title:'Forma Organiczna' },
-  { id:'1ua7RgXnxVdF4NmDucKoeGfwJszeGbM9-', cat:'3d', catLabel:'3D', title:'Abstrakcja Przestrzenna' },
-  { id:'1HXpOO68VIhBit7oiweV3XGx6Oj2WL02O', cat:'3d', catLabel:'3D', title:'Studium Światła' },
-  { id:'1JzmcIwb6DJjEvwFhdSYwlil2PUBfbRFf', cat:'3d', catLabel:'3D', title:'Bryła Architektoniczna' },
-  { id:'1wve4DaE-YhSv14-SzxIR3FdOgFA1AuDF', cat:'3d', catLabel:'3D', title:'Wizualizacja Produktu' },
-  { id:'1QwZnTgdVGCIU-ZYsF-k7daCSsboaHjnh', cat:'3d', catLabel:'3D', title:'Rzeźba Cyfrowa' },
-  { id:'1u8nRz-ebnttP_M1B_E7HLwAkbH8CMj4O', cat:'3d', catLabel:'3D', title:'Struktura Modularna' },
-  { id:'1Pc9um7JygcUSGXa61KlJbt61BVXEW88y', cat:'3d', catLabel:'3D', title:'Projekt Koncepcyjny 3D' },
-  { id:'1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa I', type:'video' },
-  { id:'11RVgCsmlIzhi0ir-K9cHyuDIatCKA0v_', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa II', type:'video' },
-  { id:'1Oim3JB30MTGw29wJ7_MxBJhjI_m3swsY', cat:'digital', catLabel:'Digital', title:'Portret Ekspresyjny' },
-  { id:'1RRlhHzSjX8JqKiGrrXVWmvbpVzcWXAyz', cat:'digital', catLabel:'Digital', title:'Ilustracja Narracyjna' },
-  { id:'15DjwvwJg8z3S0sgf-5tISYBulNWoZgnS', cat:'digital', catLabel:'Digital', title:'Postać Fantastyczna' },
-  { id:'1Z6XbrHrA6r77fHVdwJ1EtrA926pp0tag', cat:'digital', catLabel:'Digital', title:'Pejzaż Cyfrowy' },
-  { id:'1EVutHkmYjhDaH8F-dG0L6jt71QpLfMPa', cat:'digital', catLabel:'Digital', title:'Scena Emocjonalna' },
-  { id:'1AB4H35bRZwQVfx-1PDf3u23IUDMrdjUk', cat:'digital', catLabel:'Digital', title:'Projekt Postaci' },
-  { id:'1IAiajobx8Ae4DVThKuuV63VEgLlN3317', cat:'digital', catLabel:'Digital', title:'Concept Art I' },
-  { id:'1eYYOWfznCFwT7gXGF5-Ja8daizQqFcfO', cat:'digital', catLabel:'Digital', title:'Concept Art II' },
-  { id:'1a2NIrA-7zBSZDh9WEJoCeOApqxjyTxdA', cat:'digital', catLabel:'Digital', title:'Studium Postaci' },
-  { id:'1DztrFryI_J0LzwBevY41V9XAzv_hKggw', cat:'digital', catLabel:'Digital', title:'Fan Art' },
-  { id:'1WscNxWkLN2GjUI5xG28e2vV9tByEqWU2', cat:'digital', catLabel:'Digital', title:'Ilustracja Bajkowa' },
-  { id:'1XBBXeuffJXPVdOwFLSffBBnWyWTvj1ZH', cat:'digital', catLabel:'Digital', title:'Świat Alternatywny' },
-  { id:'16mv8lEmcuLMw_ihc1IGmrjXwkq9H6iz2', cat:'digital', catLabel:'Digital', title:'Projekt Środowiska' },
-  { id:'12YXOY0XQhRjTaxgoMDODxA_AmW3Gjz-U', cat:'digital', catLabel:'Digital', title:'Kolaż Cyfrowy' },
-  { id:'1vZI1oLfPtx7TylDFhlZgEeDIWX_D2AGh', cat:'digital', catLabel:'Digital', title:'Ekspresja Barwna' },
-  { id:'1I5EKsCCJWmCrX93Mb6_BFKcFoc1McAHE', cat:'digital', catLabel:'Digital', title:'Portret Stylizowany' },
-  { id:'14396qgtwEGEKV0ZfsFISjKzhSexSnnf1', cat:'linoryt', catLabel:'Linoryt', title:'Odcisk I' },
-  { id:'16nTLuYqg8gl9nuxotj-yy0m9daWjFn4Y', cat:'linoryt', catLabel:'Linoryt', title:'Odcisk II' },
-  { id:'1qqWE6oWTLDdNfMczJyD8FY9-1KRHDU6J', cat:'linoryt', catLabel:'Linoryt', title:'Kompozycja Graficzna' },
-  { id:'1dvlufbQY1aC_4EuhKq_Okv5pNX2viEUz', cat:'inne', catLabel:'Akwarela', title:'Akwarela I' },
-  { id:'1KGKD2h0ZD_dBUwZav1P7HOoGgFQHBFE6', cat:'inne', catLabel:'Akwarela', title:'Akwarela II' },
-  { id:'1aEZ2PR1W_zHpRT-hvHnod-QhcyFAJ3BJ', cat:'malarstwo', catLabel:'Malarstwo Akrylowe', title:'Martwa Natura Akrylowa' },
-  { id:'1zx2fNXPonjYNQNeJ5CrWqtuQ0aEOD9m1', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Portret Olejny I' },
-  { id:'1SmrWoW7Xewke01Jw_dK23NmGudDeKn9q', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Portret Olejny II' },
-  { id:'14-uw17T5y0lvDF8gwb0zeS-yKAdFr0IH', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Martwa Natura' },
-  { id:'1Sn6eDUPm2aQVIYBhfB2Tp1o6lyFOmBRV', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Pejzaż Olejny' },
-  { id:'12tzUYOF7zAmHx4FKAK9JJ7M7iLnfhgBe', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Studium Kolorystyczne' },
-  { id:'1shWAn_J2PpE_rGkeQNcoN6QoWjPx0iRb', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Kompozycja Figuratywna' },
-  { id:'1vz5jm8szAmAa_djstdRaLYoaYpujBYsx', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Nastrój w Oleju' },
-  { id:'1qd-YLbK8WVewnsnrcJH7vpDDKW4CEoZ_', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Piony' },
-  { id:'1bQBThmmv8gQuy73_Z9nl99g0a2FIkmd-', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Postać w Ruchu I' },
-  { id:'1o9mHXV385OC2IJ_t5LpUR14L5Wj5shkh', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Postać w Ruchu II' },
-  { id:'1xhTSRs2feC5N4HCRD0E5ULiV0kqQpBLy', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Portret Kolorowy' },
-  { id:'1vD7MP4xyRYQFzlaWHh1ewAJ5CsZypu3V', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Ekspresja Barwna' },
-  { id:'1IQ3GbkUHuYDFbD5w3LUJeSnUWcK-VTRD', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Studia Postaci' },
-  { id:'1Nsr_muMg6uNfCYSMmYKrvTkX5VIIJZYk', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Kompozycja Figuralna' },
-  { id:'1W_ILX_LXTUBbOOaWaXsqykFCCor7z7Ps', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Charakter Postaci' },
-  { id:'1MhMm6yFjghu-i_QAe7u0YMSoIyoczRJI', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'' },
-  { id:'1TBSrrki5fJeSTFhBzoHxRLiK0UT_EcLS', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'' },
-  { id:'1WBvptOX8CxVIKit6LWjNPO2XUDVZ87wV', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'' },
-  { id:'1itEayMVipwSYXMKkTPjIkRdUvvQ5kLPa', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Anatomiczne I' },
-  { id:'1EUO-yS86KlskMVnrsViXXSkTh41czvn7', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Anatomiczne II' },
-  { id:'1j-ElTM-rLQVYDvQPSOE0Z9MmZCF3WYBj', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy I' },
-  { id:'131ymu9jEMMOEPB_Fa741n1gNde5wucXr', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy II' },
-  { id:'1RBDUk-npRshEeAprySTNEhFAO8_z1u0i', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy III' },
-  { id:'1B5sthOYKCYKc5-pakyHG7zFGZi0uQ6oi', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Draperii' },
-  { id:'1MqhADGhE2uJcRO6Ayc1zsxrgwHdByOQP', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Akt Artystyczny' },
-  { id:'1WWbUX5RyDlnLjH6O4RolU0UU-9aNmH9s', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Rąk' },
-  { id:'16Lg1biB9hxnske8BzjBzJFSX04S8nkLb', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Pejzaż Grafitowy' },
-  { id:'1JF7N_yqazfvDeZzRo__CrDI1NWccYEG-', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Martwa Natura Grafitowa' },
-  { id:'1vmNw_UHfx8UwCnEu0bt1EkdYqq5MfUdB', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Twarzy' },
-  { id:'17_z9jyF7xEbZHEZbDAzwKUTlCJv6n41q', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Szkic Postaci' },
-  { id:'1XhTkgRrCs6pbmzzrR1CRhE8pHqMyfLn0', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Kompozycja Linearna' },
-  { id:'16HcLb173v1qCdsv8V-4nmOCQWFMfxoC3', cat:'plakat', catLabel:'Plakat', title:'Plakat Kulturalny I' },
-  { id:'1OR8mLZthT84XLP4J6H9GLOQLl0ZQhfVx', cat:'plakat', catLabel:'Plakat', title:'Plakat Kulturalny II' },
-  { id:'1I1agaygD0-i9Hir79kYGfjAKgDa5IJiC', cat:'plakat', catLabel:'Plakat', title:'Plakat Eventowy' },
-  { id:'1F9V01qw1UvJX16jAgCeB8761L9ihaD9F', cat:'plakat', catLabel:'Plakat', title:'Plakat Typograficzny' },
-  { id:'1Nbxcr8c11q4pRGvcKG_2rDmw6u9FWjJt', cat:'plakat', catLabel:'Plakat', title:'Plakat Konceptualny' },
-  { id:'1OlAsv18s8Jws1Y3Sq2RTXm4-Js__p4PW', cat:'plakat', catLabel:'Plakat', title:'Plakat Artystyczny' },
-  { id:'1pSaYQ3XHcMUObnDxizIP3osP1dMQc1JQ', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Rzeźbiarska I' },
-  { id:'1Q9BvBZbej30wEnF0FHJ6NCC_sspS23dG', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Rzeźbiarska II' },
-  { id:'1jVbD936ATEvH0TKKrP30gq7nNk6czYrM', cat:'rzezba', catLabel:'Rzeźba', title:'Studium Objętości' },
-  { id:'1d6XfxI3Qo-jIIZ3-QUXHgRAADMLjtaqb', cat:'rzezba', catLabel:'Rzeźba', title:'Portret Rzeźbiarski' },
-  { id:'1k0CQM9J6B_BAVy2A4j5HzsV8bMrXHIy6', cat:'rzezba', catLabel:'Rzeźba', title:'Abstrakcja Plastyczna' },
-  { id:'1d337eYhaBAV8_X7XpSs-sjohFCuHWg74', cat:'rzezba', catLabel:'Rzeźba', title:'Relief Dekoracyjny' },
-  { id:'1Dx3ARUu0FagoVnOEUGQqGDo2esTnbciA', cat:'rzezba', catLabel:'Rzeźba', title:'Kompozycja Przestrzenna' },
-  { id:'1ZeLZssJpuPoohH0hHhovbk8IvUTBFT3N', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Figuratywna' },
-  { id:'1H5fohkachLB475tUA-nfwEPPop426PV6', cat:'rzezba', catLabel:'Rzeźba', title:'Rzeźba Ekspresyjna' },
-  { id:'1DEKWVJ9zj2i8PatBzRYqp6JLlTIPvGQtAz_Il3F23YQ', cat:'inne', catLabel:'Web Design', title:'Projekt Strony WWW' },
-  { id:'1jOIAMLRxkjpEU8sIJ-dgVQWCQh3t_-ls', cat:'inne', catLabel:'Wydawnictwo', title:'Projekt Wydawniczy I' },
-  { id:'1mvD_hSn1d3ixITMNt-2oO4QSSQSP3UjA', cat:'inne', catLabel:'Wydawnictwo', title:'Projekt Wydawniczy II' },
-  { id:'1WJaWpxXlOP1TRAFFFrY6F4V5aBuqIrtb', cat:'logo', catLabel:'Logo', title:'Logotyp Minimalistyczny' },
-  { id:'1Wl7HhzWDojNr9OzwqgeR69y4xZ4m2l9I', cat:'logo', catLabel:'Logo', title:'Znak Firmowy' },
-  { id:'1KewNW9YC1wtvgdGvKVCddL8b__aFJ7Ik', cat:'logo', catLabel:'Logo', title:'Logo Emblematyczne' },
-  { id:'1pLPLEqDaeVFu01Gleb25_l20VwdzDIyX', cat:'logo', catLabel:'Logo', title:'Identyfikacja Wizualna' },
-  { id:'1MOlmX1H0cJQHIpM4md1jFHkc7vhymB1p', cat:'logo', catLabel:'Logo', title:'Brand Mark' },
-  { id:'12yugSj6augy-sJJlG62ThaL7z4SvcI5T', cat:'logo', catLabel:'Logo', title:'Logo Typograficzne' },
-  { id:'1-pAzVF6u4qN3LW4V3qN_Wl1-4IxXJ7Ed', cat:'logo', catLabel:'Logo', title:'Sygnatura Marki' },
-  { id:'1yKIrEiXXeBvJArWPls1wH-Gp8p3SFtnE', cat:'logo', catLabel:'Logo', title:'Logo Ilustracyjne' },
+// ══════════════════════════════════════════════════════════
+// ДЛЯ ДОДАВАННЯ НОВОЇ РОБОТИ — просто додай рядок:
+//
+// ['ID', 'категорія']                       — без назви
+// ['ID', 'категорія', 'Назва роботи']       — з назвою
+// ['ID', 'animacja', 'video']               — відео без назви
+// ['ID', 'animacja', 'video', 'Назва']      — відео з назвою
+//
+// Категорії: 3d | digital | malarstwo | rysunek
+//            animacja | logo | plakat | linoryt | rzezba | inne
+// ══════════════════════════════════════════════════════════
+const rawProjects = [
+  // 3D
+  ['1q464T4sbob9uAWefvJzhZrMru-srhnMZ', '3d'],
+  ['1gfqp3-B-7PhoVtNLAT9loSR9GBfwC-WB', '3d'],
+  ['1lYJ7Wp-AZjM2rHHIVG59w88tjUGeFgUn', '3d'],
+  ['1ua7RgXnxVdF4NmDucKoeGfwJszeGbM9-', '3d'],
+  ['1HXpOO68VIhBit7oiweV3XGx6Oj2WL02O', '3d'],
+  ['1JzmcIwb6DJjEvwFhdSYwlil2PUBfbRFf', '3d'],
+  ['1wve4DaE-YhSv14-SzxIR3FdOgFA1AuDF', '3d'],
+  ['1QwZnTgdVGCIU-ZYsF-k7daCSsboaHjnh', '3d'],
+  ['1u8nRz-ebnttP_M1B_E7HLwAkbH8CMj4O', '3d'],
+  ['1Pc9um7JygcUSGXa61KlJbt61BVXEW88y', '3d'],
+  // Animacja
+  ['1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA', 'animacja', 'video'],
+  ['11RVgCsmlIzhi0ir-K9cHyuDIatCKA0v_', 'animacja', 'video'],
+  // Digital
+  ['1Oim3JB30MTGw29wJ7_MxBJhjI_m3swsY', 'digital'],
+  ['1RRlhHzSjX8JqKiGrrXVWmvbpVzcWXAyz', 'digital'],
+  ['15DjwvwJg8z3S0sgf-5tISYBulNWoZgnS', 'digital'],
+  ['1Z6XbrHrA6r77fHVdwJ1EtrA926pp0tag', 'digital'],
+  ['1EVutHkmYjhDaH8F-dG0L6jt71QpLfMPa', 'digital'],
+  ['1AB4H35bRZwQVfx-1PDf3u23IUDMrdjUk', 'digital'],
+  ['1IAiajobx8Ae4DVThKuuV63VEgLlN3317', 'digital'],
+  ['1eYYOWfznCFwT7gXGF5-Ja8daizQqFcfO', 'digital'],
+  ['1a2NIrA-7zBSZDh9WEJoCeOApqxjyTxdA', 'digital'],
+  ['1DztrFryI_J0LzwBevY41V9XAzv_hKggw', 'digital'],
+  ['1WscNxWkLN2GjUI5xG28e2vV9tByEqWU2', 'digital'],
+  ['1XBBXeuffJXPVdOwFLSffBBnWyWTvj1ZH', 'digital'],
+  ['16mv8lEmcuLMw_ihc1IGmrjXwkq9H6iz2', 'digital'],
+  ['12YXOY0XQhRjTaxgoMDODxA_AmW3Gjz-U', 'digital'],
+  ['1vZI1oLfPtx7TylDFhlZgEeDIWX_D2AGh', 'digital'],
+  ['1I5EKsCCJWmCrX93Mb6_BFKcFoc1McAHE', 'digital'],
+  // Linoryt
+  ['14396qgtwEGEKV0ZfsFISjKzhSexSnnf1', 'linoryt'],
+  ['16nTLuYqg8gl9nuxotj-yy0m9daWjFn4Y', 'linoryt'],
+  ['1qqWE6oWTLDdNfMczJyD8FY9-1KRHDU6J', 'linoryt'],
+  // Inne
+  ['1dvlufbQY1aC_4EuhKq_Okv5pNX2viEUz', 'inne'],
+  ['1KGKD2h0ZD_dBUwZav1P7HOoGgFQHBFE6', 'inne'],
+  ['1DEKWVJ9zj2i8PatBzRYqp6JLlTIPvGQtAz_Il3F23YQ', 'inne'],
+  ['1jOIAMLRxkjpEU8sIJ-dgVQWCQh3t_-ls', 'inne'],
+  ['1mvD_hSn1d3ixITMNt-2oO4QSSQSP3UjA', 'inne'],
+  // Malarstwo
+  ['1aEZ2PR1W_zHpRT-hvHnod-QhcyFAJ3BJ', 'malarstwo'],
+  ['1zx2fNXPonjYNQNeJ5CrWqtuQ0aEOD9m1', 'malarstwo'],
+  ['1SmrWoW7Xewke01Jw_dK23NmGudDeKn9q', 'malarstwo'],
+  ['14-uw17T5y0lvDF8gwb0zeS-yKAdFr0IH', 'malarstwo'],
+  ['1Sn6eDUPm2aQVIYBhfB2Tp1o6lyFOmBRV', 'malarstwo'],
+  ['12tzUYOF7zAmHx4FKAK9JJ7M7iLnfhgBe', 'malarstwo'],
+  ['1shWAn_J2PpE_rGkeQNcoN6QoWjPx0iRb', 'malarstwo'],
+  ['1vz5jm8szAmAa_djstdRaLYoaYpujBYsx', 'malarstwo'],
+  ['1qd-YLbK8WVewnsnrcJH7vpDDKW4CEoZ_', 'malarstwo', 'Piony'],
+  // Rysunek
+  ['1bQBThmmv8gQuy73_Z9nl99g0a2FIkmd-', 'rysunek'],
+  ['1o9mHXV385OC2IJ_t5LpUR14L5Wj5shkh', 'rysunek'],
+  ['1xhTSRs2feC5N4HCRD0E5ULiV0kqQpBLy', 'rysunek'],
+  ['1vD7MP4xyRYQFzlaWHh1ewAJ5CsZypu3V', 'rysunek'],
+  ['1IQ3GbkUHuYDFbD5w3LUJeSnUWcK-VTRD', 'rysunek'],
+  ['1Nsr_muMg6uNfCYSMmYKrvTkX5VIIJZYk', 'rysunek'],
+  ['1W_ILX_LXTUBbOOaWaXsqykFCCor7z7Ps', 'rysunek'],
+  ['1MhMm6yFjghu-i_QAe7u0YMSoIyoczRJI', 'rysunek'],
+  ['1TBSrrki5fJeSTFhBzoHxRLiK0UT_EcLS', 'rysunek'],
+  ['1WBvptOX8CxVIKit6LWjNPO2XUDVZ87wV', 'rysunek'],
+  ['1itEayMVipwSYXMKkTPjIkRdUvvQ5kLPa', 'rysunek'],
+  ['1EUO-yS86KlskMVnrsViXXSkTh41czvn7', 'rysunek'],
+  ['1j-ElTM-rLQVYDvQPSOE0Z9MmZCF3WYBj', 'rysunek'],
+  ['131ymu9jEMMOEPB_Fa741n1gNde5wucXr', 'rysunek'],
+  ['1RBDUk-npRshEeAprySTNEhFAO8_z1u0i', 'rysunek'],
+  ['1B5sthOYKCYKc5-pakyHG7zFGZi0uQ6oi', 'rysunek'],
+  ['1MqhADGhE2uJcRO6Ayc1zsxrgwHdByOQP', 'rysunek'],
+  ['1WWbUX5RyDlnLjH6O4RolU0UU-9aNmH9s', 'rysunek'],
+  ['16Lg1biB9hxnske8BzjBzJFSX04S8nkLb', 'rysunek'],
+  ['1JF7N_yqazfvDeZzRo__CrDI1NWccYEG-', 'rysunek'],
+  ['1vmNw_UHfx8UwCnEu0bt1EkdYqq5MfUdB', 'rysunek'],
+  ['17_z9jyF7xEbZHEZbDAzwKUTlCJv6n41q', 'rysunek'],
+  ['1XhTkgRrCs6pbmzzrR1CRhE8pHqMyfLn0', 'rysunek'],
+  // Plakat
+  ['16HcLb173v1qCdsv8V-4nmOCQWFMfxoC3', 'plakat'],
+  ['1OR8mLZthT84XLP4J6H9GLOQLl0ZQhfVx', 'plakat'],
+  ['1I1agaygD0-i9Hir79kYGfjAKgDa5IJiC', 'plakat'],
+  ['1F9V01qw1UvJX16jAgCeB8761L9ihaD9F', 'plakat'],
+  ['1Nbxcr8c11q4pRGvcKG_2rDmw6u9FWjJt', 'plakat'],
+  ['1OlAsv18s8Jws1Y3Sq2RTXm4-Js__p4PW', 'plakat'],
+  // Rzeźba
+  ['1pSaYQ3XHcMUObnDxizIP3osP1dMQc1JQ', 'rzezba'],
+  ['1Q9BvBZbej30wEnF0FHJ6NCC_sspS23dG', 'rzezba'],
+  ['1jVbD936ATEvH0TKKrP30gq7nNk6czYrM', 'rzezba'],
+  ['1d6XfxI3Qo-jIIZ3-QUXHgRAADMLjtaqb', 'rzezba'],
+  ['1k0CQM9J6B_BAVy2A4j5HzsV8bMrXHIy6', 'rzezba'],
+  ['1d337eYhaBAV8_X7XpSs-sjohFCuHWg74', 'rzezba'],
+  ['1Dx3ARUu0FagoVnOEUGQqGDo2esTnbciA', 'rzezba'],
+  ['1ZeLZssJpuPoohH0hHhovbk8IvUTBFT3N', 'rzezba'],
+  ['1H5fohkachLB475tUA-nfwEPPop426PV6', 'rzezba'],
+  // Logo
+  ['1WJaWpxXlOP1TRAFFFrY6F4V5aBuqIrtb', 'logo'],
+  ['1Wl7HhzWDojNr9OzwqgeR69y4xZ4m2l9I', 'logo'],
+  ['1KewNW9YC1wtvgdGvKVCddL8b__aFJ7Ik', 'logo'],
+  ['1pLPLEqDaeVFu01Gleb25_l20VwdzDIyX', 'logo'],
+  ['1MOlmX1H0cJQHIpM4md1jFHkc7vhymB1p', 'logo'],
+  ['12yugSj6augy-sJJlG62ThaL7z4SvcI5T', 'logo'],
+  ['1-pAzVF6u4qN3LW4V3qN_Wl1-4IxXJ7Ed', 'logo'],
+  ['1yKIrEiXXeBvJArWPls1wH-Gp8p3SFtnE', 'logo'],
 ];
+
+// ── АВТОГЕНЕРАЦІЯ — не редагуй нижче ─────────────────────
+const catLabels = {
+  '3d':'3D', digital:'Digital', malarstwo:'Malarstwo',
+  rysunek:'Rysunek', animacja:'Animacja', logo:'Logo',
+  plakat:'Plakat', linoryt:'Linoryt', rzezba:'Rzeźba', inne:'Inne',
+};
+
+const projects = rawProjects.map(entry => {
+  const id  = entry[0];
+  const cat = entry[1];
+  // розпізнаємо чи є відео і чи є назва
+  let type  = null;
+  let title = '';
+  for(let i = 2; i < entry.length; i++){
+    if(entry[i] === 'video') type = 'video';
+    else title = entry[i];
+  }
+  return { id, cat, catLabel: catLabels[cat] || cat, title, type };
+});
+
+// оновлюємо лічильники на hero після генерації
+document.addEventListener('DOMContentLoaded', () => {
+  const heroCount = document.getElementById('heroCount');
+  const heroCats  = document.getElementById('heroCats');
+  if(heroCount) heroCount.textContent = projects.length;
+  if(heroCats)  heroCats.textContent  = new Set(projects.map(p => p.cat)).size;
+});
+// ─────────────────────────────────────────────────────────
 
 function gdUrl(id){ return `https://lh3.googleusercontent.com/d/${id}`; }
 
-// ── GALLERY ──────────────────────────────────────────────
+// ── BUILD CATEGORY BUTTONS DYNAMICALLY ───────────────────
+const catMeta = {
+  all:      'Wszystkie',
+  '3d':     '3D',
+  digital:  'Digital',
+  malarstwo:'Malarstwo',
+  rysunek:  'Rysunek',
+  animacja: 'Animacja',
+  logo:     'Logo',
+  plakat:   'Plakat',
+  linoryt:  'Linoryt',
+  rzezba:   'Rzeźba',
+  inne:     'Inne',
+};
+
+function buildCatButtons(){
+  const wrap = document.getElementById('catButtons');
+  wrap.innerHTML = '';
+  const order = ['all','3d','digital','malarstwo','rysunek','animacja','logo','plakat','linoryt','rzezba','inne'];
+  order.forEach(cat => {
+    const count = cat === 'all' ? projects.length : projects.filter(p => p.cat === cat).length;
+    if(count === 0) return; // hide empty categories
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (cat === 'all' ? ' active' : '');
+    btn.dataset.cat = cat;
+    btn.textContent = `${catMeta[cat]} (${count})`;
+    btn.addEventListener('click', () => filterToCategory(cat));
+    wrap.appendChild(btn);
+  });
+}
+
+buildCatButtons();
+
+// ── SHOWCASE ──────────────────────────────────────────────
+const catOrder = ['3d','digital','malarstwo','rysunek','animacja','logo','plakat','linoryt','rzezba','inne'];
+
+function renderShowcase(){
+  const grid = document.getElementById('showcaseGrid');
+  grid.innerHTML = '';
+  document.getElementById('countNum').textContent = projects.length;
+
+  catOrder.forEach(cat => {
+    const catProjects = projects.filter(p => p.cat === cat);
+    if(!catProjects.length) return;
+    const p = catProjects[0]; // перша робота категорії
+    const label = catLabels[cat] || cat;
+    const isVideo = p.type === 'video';
+
+    const div = document.createElement('div');
+    div.className = 'showcase-item';
+    div.innerHTML = `
+      <img src="${gdUrl(p.id)}" alt="${label}" loading="lazy">
+      <div class="showcase-overlay">
+        <div class="showcase-cat-label">Kategoria</div>
+        <div class="showcase-cat-name">${label}</div>
+        <div class="showcase-count">${catProjects.length} ${catProjects.length === 1 ? 'praca' : catProjects.length < 5 ? 'prace' : 'prac'}</div>
+      </div>
+      <div class="showcase-arrow">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>`;
+    div.addEventListener('click', () => openFullGallery(cat));
+    grid.appendChild(div);
+  });
+  bindCursorHover();
+}
+
+function openFullGallery(cat){
+  // сховати showcase
+  document.getElementById('showcaseGrid').style.display = 'none';
+  document.querySelector('.show-all-wrap').style.display = 'none';
+  // показати повну галерею
+  const wrap = document.getElementById('fullGalleryWrap');
+  wrap.classList.add('visible');
+  // прокрутити вгору секції
+  document.getElementById('gallery-section').scrollIntoView({behavior:'smooth'});
+  // фільтрувати
+  filterToCategory(cat);
+}
+
+function closeFullGallery(){
+  document.getElementById('fullGalleryWrap').classList.remove('visible');
+  document.getElementById('showcaseGrid').style.display = '';
+  document.querySelector('.show-all-wrap').style.display = '';
+  document.getElementById('gallery-section').scrollIntoView({behavior:'smooth'});
+}
+
+document.getElementById('btnShowAll').addEventListener('click', () => openFullGallery('all'));
+document.getElementById('btnBackShowcase').addEventListener('click', closeFullGallery);
+
+renderShowcase();
+
+// ── FILTER ────────────────────────────────────────────────
 let filtered = [...projects];
 let currentIdx = 0;
 
 function renderGallery(items){
   const grid = document.getElementById('galleryGrid');
   grid.innerHTML = '';
-  document.getElementById('countNum').textContent = items.length;
   items.forEach((p,i) => {
     const d = document.createElement('div');
     d.className = 'gallery-item';
@@ -975,14 +1193,22 @@ function renderGallery(items){
   bindCursorHover();
 }
 
-renderGallery(projects);
-
-// ── FILTER ────────────────────────────────────────────────
 function filterToCategory(cat){
+  // якщо showcase видима — переключаємо на повну галерею
+  const showcase = document.getElementById('showcaseGrid');
+  if(showcase && showcase.style.display !== 'none'){
+    showcase.style.display = 'none';
+    document.querySelector('.show-all-wrap').style.display = 'none';
+    document.getElementById('fullGalleryWrap').classList.add('visible');
+  }
+
   document.querySelectorAll('.cat-btn').forEach(b => {
     b.classList.toggle('active', b.dataset.cat === cat);
   });
   filtered = cat === 'all' ? [...projects] : projects.filter(p => p.cat === cat);
+  const label = cat === 'all' ? 'Wszystkie prace' : (catLabels[cat] || cat);
+  document.getElementById('fullGalleryTitle').textContent = label + ' (' + filtered.length + ')';
+
   const grid = document.getElementById('galleryGrid');
   grid.style.opacity = '0'; grid.style.transform = 'translateY(10px)';
   setTimeout(() => {
@@ -995,9 +1221,6 @@ function filterToCategory(cat){
   document.getElementById('gallery-section').scrollIntoView({behavior:'smooth'});
 }
 
-document.querySelectorAll('.cat-btn').forEach(btn => {
-  btn.addEventListener('click', () => filterToCategory(btn.dataset.cat));
-});
 
 // ── LIGHTBOX ──────────────────────────────────────────────
 const lb = document.getElementById('lightbox');
