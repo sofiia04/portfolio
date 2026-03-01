@@ -566,7 +566,20 @@ nav {
   text-transform:uppercase; color:var(--secondary);
 }
 
-/* ── CONTACT ── */
+/* ── LANG SWITCHER ── */
+.lang-switcher {
+  display:flex; align-items:center; gap:2px;
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em;
+}
+.lang-btn {
+  background:none; border:none; cursor:none;
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--muted);
+  padding:4px 8px; transition:color .25s;
+}
+.lang-btn.active { color:var(--green); }
+.lang-btn:hover { color:var(--text); }
+.lang-sep { color:var(--border); font-size:12px; }
 #contact {
   background:var(--surface); padding:100px 80px; min-height:50vh;
   display:flex; flex-direction:column; justify-content:center;
@@ -657,12 +670,17 @@ footer {
 <nav>
   <a href="#" class="nav-logo">Sofiia Vorona</a>
   <ul class="nav-links">
-    <li><a href="#gallery-section">Galeria</a></li>
-    <li><a href="#about">O mnie</a></li>
-    <li><a href="#services">Usługi</a></li>
+    <li><a href="#gallery-section" data-i18n="nav.gallery">Galeria</a></li>
+    <li><a href="#about" data-i18n="nav.about">O mnie</a></li>
+    <li><a href="#services" data-i18n="nav.services">Usługi</a></li>
     <li><a href="#cv">CV</a></li>
-    <li><a href="#contact">Kontakt</a></li>
+    <li><a href="#contact" data-i18n="nav.contact">Kontakt</a></li>
   </ul>
+  <div class="lang-switcher">
+    <button class="lang-btn active" id="btnPL" onclick="setLang('pl')">PL</button>
+    <span class="lang-sep">·</span>
+    <button class="lang-btn" id="btnEN" onclick="setLang('en')">EN</button>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -670,11 +688,11 @@ footer {
   <div class="hero-left">
     <div class="hero-eyebrow">Graphic Designer — Poznań</div>
     <h1 class="hero-title">Sofiia<br><em>Vorona</em></h1>
-    <p class="hero-subtitle">Ilustracja · Branding · Animacja · 3D</p>
-    <p class="hero-desc">Tworzę projekty, przez które można poczuć emocję, nastrój, charakter. Łączę kreatywność z funkcjonalnością i klarowną komunikacją wizualną.</p>
+    <p class="hero-subtitle" data-i18n="hero.subtitle">Ilustracja · Branding · Animacja · 3D</p>
+    <p class="hero-desc" data-i18n="hero.desc">Tworzę projekty, przez które można poczuć emocję, nastrój, charakter. Łączę kreatywność z funkcjonalnością i klarowną komunikacją wizualną.</p>
     <div class="hero-cta">
-      <a href="#gallery-section" class="btn-primary">Zobacz prace</a>
-      <a href="#contact" class="btn-secondary">Kontakt</a>
+      <a href="#gallery-section" class="btn-primary" data-i18n="hero.cta1">Zobacz prace</a>
+      <a href="#contact" class="btn-secondary" data-i18n="hero.cta2">Kontakt</a>
     </div>
   </div>
 
@@ -687,11 +705,11 @@ footer {
   <div class="hero-stats">
     <div class="stat-item">
       <div class="stat-number" id="heroCount">—</div>
-      <div class="stat-label">Prac w portfolio</div>
+      <div class="stat-label" data-i18n="hero.works">Prac w portfolio</div>
     </div>
     <div class="stat-item">
       <div class="stat-number" id="heroCats">—</div>
-      <div class="stat-label">Kategorii</div>
+      <div class="stat-label" data-i18n="hero.cats">Kategorii</div>
     </div>
   </div>
 
@@ -733,22 +751,22 @@ footer {
 <section id="gallery-section">
   <div class="gallery-header fade-up">
     <div>
-      <div class="section-tag">Portfolio</div>
-      <h2 class="section-title">Wybrane<br><em>Prace</em></h2>
+      <div class="section-tag" data-i18n="gallery.tag">Portfolio</div>
+      <h2 class="section-title" data-i18n="gallery.title">Wybrane<br><em>Prace</em></h2>
     </div>
-    <div class="gallery-count"><span id="countNum">—</span>&nbsp;prac</div>
+    <div class="gallery-count"><span id="countNum">—</span>&nbsp;<span data-i18n="gallery.works">prac</span></div>
   </div>
 
   <!-- SHOWCASE: по одній від категорії -->
   <div class="showcase-grid" id="showcaseGrid"></div>
   <div class="show-all-wrap">
-    <button class="btn-show-all" id="btnShowAll">Zobacz wszystkie prace</button>
+    <button class="btn-show-all" id="btnShowAll" data-i18n="gallery.showall">Zobacz wszystkie prace</button>
   </div>
 
   <!-- ПОВНА ГАЛЕРЕЯ: з'являється після кліку -->
   <div class="full-gallery-wrap" id="fullGalleryWrap">
     <div class="full-gallery-header">
-      <button class="btn-back-showcase" id="btnBackShowcase">Powrót do kategorii</button>
+      <button class="btn-back-showcase" id="btnBackShowcase" data-i18n="gallery.back">Powrót do kategorii</button>
       <div id="fullGalleryTitle" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--secondary);"></div>
     </div>
     <!-- фільтри -->
@@ -773,7 +791,7 @@ footer {
       </button>
     </div>
     <div class="lb-info">
-      <button id="lbClose">✕ &nbsp;Zamknij</button>
+      <button id="lbClose" data-i18n="lb.close">✕ &nbsp;Zamknij</button>
       <div id="lbTag"></div>
       <div id="lbTitle"></div>
       <div id="lbCounter"></div>
@@ -793,12 +811,12 @@ footer {
   </div>
 
   <div class="fade-up">
-    <div class="section-tag">O mnie</div>
-    <h2 class="section-title" style="margin-bottom:28px;">Tworzę<br><em>z emocją</em></h2>
-    <p class="about-text">Nazywam się Sofiia i specjalizuję się w projektowaniu graficznym. Od ponad trzech lat mieszkam w Poznaniu, gdzie ukończyłam studia w Collegium Da Vinci.</p>
-    <p class="about-text">W projektowaniu łączę kreatywność z funkcjonalnością, dbając o estetykę, spójność wizualną i klarowną komunikację. Najważniejsze jest to, żeby przez design można było poczuć emocję, nastrój, charakter.</p>
+    <div class="section-tag" data-i18n="about.tag">O mnie</div>
+    <h2 class="section-title" style="margin-bottom:28px;" data-i18n="about.title">Tworzę<br><em>z emocją</em></h2>
+    <p class="about-text" data-i18n="about.p1">Nazywam się Sofiia i specjalizuję się w projektowaniu graficznym. Od ponad trzech lat mieszkam w Poznaniu, gdzie ukończyłam studia w Collegium Da Vinci.</p>
+    <p class="about-text" data-i18n="about.p2">W projektowaniu łączę kreatywność z funkcjonalnością, dbając o estetykę, spójność wizualną i klarowną komunikację. Najważniejsze jest to, żeby przez design można było poczuć emocję, nastrój, charakter.</p>
     <div class="skills-wrap">
-      <div class="skills-label">Narzędzia</div>
+      <div class="skills-label" data-i18n="about.tools">Narzędzia</div>
       <div class="skills-list">
         <span class="skill-tag">Photoshop</span>
         <span class="skill-tag">Illustrator</span>
@@ -816,8 +834,8 @@ footer {
 <!-- SERVICES -->
 <section id="services">
   <div class="services-intro fade-up">
-    <div class="section-tag">Zakres usług</div>
-    <h2 class="section-title">Co<br><em>robię</em></h2>
+    <div class="section-tag" data-i18n="services.tag">Zakres usług</div>
+    <h2 class="section-title" data-i18n="services.title">Co<br><em>robię</em></h2>
   </div>
   <div class="services-grid fade-up">
 
@@ -830,9 +848,9 @@ footer {
       <div class="service-body">
         <div class="service-num">01</div>
         <div class="service-line"></div>
-        <div class="service-name">Ilustracja<br>& Postacie</div>
-        <div class="service-desc">Cyfrowe ilustracje, projekty postaci, rysunek ołówkiem i kolorowy — od szkicu po gotowy plik.</div>
-        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('rysunek')">Zobacz prace &nbsp;</a>
+        <div class="service-name" data-i18n="s1.name">Ilustracja<br>& Postacie</div>
+        <div class="service-desc" data-i18n="s1.desc">Cyfrowe ilustracje, projekty postaci, rysunek ołówkiem i kolorowy — od szkicu po gotowy plik.</div>
+        <a href="#gallery-section" class="service-cat-link" data-i18n="services.see" onclick="event.stopPropagation(); filterToCategory('rysunek')">Zobacz prace &nbsp;</a>
       </div>
     </div>
 
@@ -845,9 +863,9 @@ footer {
       <div class="service-body">
         <div class="service-num">02</div>
         <div class="service-line"></div>
-        <div class="service-name">Logo<br>& Branding</div>
-        <div class="service-desc">Logotypy, identyfikacja wizualna, plakaty i kompleksowy branding dla firm i projektów.</div>
-        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('logo')">Zobacz prace &nbsp;</a>
+        <div class="service-name" data-i18n="s2.name">Logo<br>& Branding</div>
+        <div class="service-desc" data-i18n="s2.desc">Logotypy, identyfikacja wizualna, plakaty i kompleksowy branding dla firm i projektów.</div>
+        <a href="#gallery-section" class="service-cat-link" data-i18n="services.see" onclick="event.stopPropagation(); filterToCategory('logo')">Zobacz prace &nbsp;</a>
       </div>
     </div>
 
@@ -860,9 +878,9 @@ footer {
       <div class="service-body">
         <div class="service-num">03</div>
         <div class="service-line"></div>
-        <div class="service-name">Animacja<br>& 3D</div>
-        <div class="service-desc">Animacje 2D frame by frame, modelowanie i wizualizacje 3D, motion graphics.</div>
-        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('animacja')">Zobacz prace &nbsp;</a>
+        <div class="service-name" data-i18n="s3.name">Animacja<br>& 3D</div>
+        <div class="service-desc" data-i18n="s3.desc">Animacje 2D frame by frame, modelowanie i wizualizacje 3D, motion graphics.</div>
+        <a href="#gallery-section" class="service-cat-link" data-i18n="services.see" onclick="event.stopPropagation(); filterToCategory('animacja')">Zobacz prace &nbsp;</a>
       </div>
     </div>
 
@@ -875,9 +893,9 @@ footer {
       <div class="service-body">
         <div class="service-num">04</div>
         <div class="service-line"></div>
-        <div class="service-name">Druk<br>& Wydawnictwo</div>
-        <div class="service-desc">Projekty do druku: wizytówki, odzież, publikacje, książki, materiały promocyjne.</div>
-        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('plakat')">Zobacz prace &nbsp;</a>
+        <div class="service-name" data-i18n="s4.name">Druk<br>& Wydawnictwo</div>
+        <div class="service-desc" data-i18n="s4.desc">Projekty do druku: wizytówki, odzież, publikacje, książki, materiały promocyjne.</div>
+        <a href="#gallery-section" class="service-cat-link" data-i18n="services.see" onclick="event.stopPropagation(); filterToCategory('plakat')">Zobacz prace &nbsp;</a>
       </div>
     </div>
 
@@ -887,15 +905,15 @@ footer {
 <!-- CV -->
 <section id="cv">
   <div class="fade-up">
-    <div class="section-tag">Doświadczenie</div>
-    <h2 class="section-title">Droga<br><em>zawodowa</em></h2>
+    <div class="section-tag" data-i18n="cv.tag">Doświadczenie</div>
+    <h2 class="section-title" data-i18n="cv.title">Droga<br><em>zawodowa</em></h2>
   </div>
   <div class="cv-grid fade-up">
     <div>
-      <div class="cv-col-title">Praca</div>
+      <div class="cv-col-title" data-i18n="cv.work">Praca</div>
       <div class="timeline">
         <div class="timeline-item">
-          <div class="t-date">2023 – obecnie</div>
+          <div class="t-date">2023 – <span data-i18n="cv.present">obecnie</span></div>
           <div class="t-role">Graphic Designer</div>
           <div class="t-company">Freelance</div>
         </div>
@@ -907,7 +925,7 @@ footer {
       </div>
     </div>
     <div>
-      <div class="cv-col-title">Edukacja</div>
+      <div class="cv-col-title" data-i18n="cv.edu">Edukacja</div>
       <div class="timeline">
         <div class="timeline-item">
           <div class="t-date">2022 – 2025</div>
@@ -921,10 +939,10 @@ footer {
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-tag fade-up" style="text-align:center; margin-bottom:20px;">Napisz do mnie</div>
-  <h2 class="contact-heading fade-up">Zróbmy coś<br><em>razem</em></h2>
+  <div class="section-tag fade-up" style="text-align:center; margin-bottom:20px;" data-i18n="contact.tag">Napisz do mnie</div>
+  <h2 class="contact-heading fade-up" data-i18n="contact.title">Zróbmy coś<br><em>razem</em></h2>
   <div class="contact-links fade-up">
-    <a href="mailto:vorona.sofiia@gmail.com" class="contact-link">vorona.sofiia@gmail.com</a>
+    <a href="/cdn-cgi/l/email-protection#90e6ffe2fffef1bee3fff6f9f9f1d0f7fdf1f9fcbef3fffd" class="contact-link"><span class="__cf_email__" data-cfemail="2d5b425f42434c035e424b44444c6d4a404c4441034e4240">[email&#160;protected]</span></a>
     <a href="tel:+48539797404" class="contact-link">+48 539 797 404</a>
     <a href="https://www.linkedin.com/in/sofiia-vorona-b83008313/" target="_blank" class="contact-link">LinkedIn</a>
   </div>
@@ -935,7 +953,137 @@ footer {
   <div class="footer-langs">PL · UA · EN</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── I18N TRANSLATIONS ─────────────────────────────────────
+const i18n = {
+  pl: {
+    'nav.gallery':    'Galeria',
+    'nav.about':      'O mnie',
+    'nav.services':   'Usługi',
+    'nav.contact':    'Kontakt',
+    'hero.subtitle':  'Ilustracja · Branding · Animacja · 3D',
+    'hero.desc':      'Tworzę projekty, przez które można poczuć emocję, nastrój, charakter. Łączę kreatywność z funkcjonalnością i klarowną komunikacją wizualną.',
+    'hero.cta1':      'Zobacz prace',
+    'hero.cta2':      'Kontakt',
+    'hero.works':     'Prac w portfolio',
+    'hero.cats':      'Kategorii',
+    'about.tag':      'O mnie',
+    'about.title':    'Tworzę<br><em>z emocją</em>',
+    'about.p1':       'Nazywam się Sofiia i specjalizuję się w projektowaniu graficznym. Od ponad trzech lat mieszkam w Poznaniu, gdzie ukończyłam studia w Collegium Da Vinci.',
+    'about.p2':       'W projektowaniu łączę kreatywność z funkcjonalnością, dbając o estetykę, spójność wizualną i klarowną komunikację. Najważniejsze jest to, żeby przez design można było poczuć emocję, nastrój, charakter.',
+    'about.tools':    'Narzędzia',
+    'services.tag':   'Zakres usług',
+    'services.title': 'Co<br><em>robię</em>',
+    'services.see':   'Zobacz prace →',
+    's1.name':        'Ilustracja<br>& Postacie',
+    's1.desc':        'Cyfrowe ilustracje, projekty postaci, rysunek ołówkiem i kolorowy — od szkicu po gotowy plik.',
+    's2.name':        'Logo<br>& Branding',
+    's2.desc':        'Logotypy, identyfikacja wizualna, plakaty i kompleksowy branding dla firm i projektów.',
+    's3.name':        'Animacja<br>& 3D',
+    's3.desc':        'Animacje 2D frame by frame, modelowanie i wizualizacje 3D, motion graphics.',
+    's4.name':        'Druk<br>& Wydawnictwo',
+    's4.desc':        'Projekty do druku: wizytówki, odzież, publikacje, książki, materiały promocyjne.',
+    'cv.tag':         'Doświadczenie',
+    'cv.title':       'Droga<br><em>zawodowa</em>',
+    'cv.work':        'Praca',
+    'cv.edu':         'Edukacja',
+    'cv.present':     'obecnie',
+    'contact.tag':    'Napisz do mnie',
+    'contact.title':  'Zróbmy coś<br><em>razem</em>',
+    'gallery.tag':    'Portfolio',
+    'gallery.title':  'Wybrane<br><em>Prace</em>',
+    'gallery.works':  'prac',
+    'gallery.showall':'Zobacz wszystkie prace',
+    'gallery.back':   'Powrót do kategorii',
+    'lb.close':       '✕ &nbsp;Zamknij',
+    'showcase.cat':   'Kategoria',
+    'cat.all':        'Wszystkie',
+    // plurals: prac/prace
+    'works.1':        'praca',
+    'works.2':        'prace',
+    'works.5':        'prac',
+  },
+  en: {
+    'nav.gallery':    'Gallery',
+    'nav.about':      'About',
+    'nav.services':   'Services',
+    'nav.contact':    'Contact',
+    'hero.subtitle':  'Illustration · Branding · Animation · 3D',
+    'hero.desc':      'I create projects through which you can feel emotion, mood, character. I combine creativity with functionality and clear visual communication.',
+    'hero.cta1':      'View works',
+    'hero.cta2':      'Contact',
+    'hero.works':     'Works in portfolio',
+    'hero.cats':      'Categories',
+    'about.tag':      'About me',
+    'about.title':    'I create<br><em>with emotion</em>',
+    'about.p1':       'My name is Sofiia and I specialize in graphic design. For over three years I have lived in Poznań, where I graduated from Collegium Da Vinci.',
+    'about.p2':       'In design I combine creativity with functionality, focusing on aesthetics, visual consistency and clear communication. The most important thing is that through design one can feel emotion, mood and character.',
+    'about.tools':    'Tools',
+    'services.tag':   'Services',
+    'services.title': 'What<br><em>I do</em>',
+    'services.see':   'See works →',
+    's1.name':        'Illustration<br>& Characters',
+    's1.desc':        'Digital illustrations, character design, pencil and colour drawing — from sketch to final file.',
+    's2.name':        'Logo<br>& Branding',
+    's2.desc':        'Logotypes, visual identity, posters and comprehensive branding for businesses and projects.',
+    's3.name':        'Animation<br>& 3D',
+    's3.desc':        'Frame-by-frame 2D animation, 3D modelling and visualisation, motion graphics.',
+    's4.name':        'Print<br>& Publishing',
+    's4.desc':        'Print projects: business cards, clothing, publications, books, promotional materials.',
+    'cv.tag':         'Experience',
+    'cv.title':       'Career<br><em>path</em>',
+    'cv.work':        'Work',
+    'cv.edu':         'Education',
+    'cv.present':     'present',
+    'contact.tag':    'Get in touch',
+    'contact.title':  'Let\'s create<br><em>together</em>',
+    'gallery.tag':    'Portfolio',
+    'gallery.title':  'Selected<br><em>Works</em>',
+    'gallery.works':  'works',
+    'gallery.showall':'View all works',
+    'gallery.back':   'Back to categories',
+    'lb.close':       '✕ &nbsp;Close',
+    'showcase.cat':   'Category',
+    'cat.all':        'All',
+    // plurals: same for EN
+    'works.1':        'work',
+    'works.2':        'works',
+    'works.5':        'works',
+  }
+};
+
+let currentLang = 'pl';
+
+function t(key){ return (i18n[currentLang] || i18n.pl)[key] || key; }
+
+// plurals helper
+function worksPlural(n){
+  if(currentLang === 'en') return n === 1 ? t('works.1') : t('works.5');
+  return n === 1 ? t('works.1') : n < 5 ? t('works.2') : t('works.5');
+}
+
+// category labels per language
+const catLabelsI18n = {
+  pl: { '3d':'3D', digital:'Digital', malarstwo:'Malarstwo', rysunek:'Rysunek', animacja:'Animacja', logo:'Logo', plakat:'Plakat', linoryt:'Linoryt', rzezba:'Rzeźba', inne:'Inne' },
+  en: { '3d':'3D', digital:'Digital', malarstwo:'Painting',  rysunek:'Drawing',  animacja:'Animation', logo:'Logo', plakat:'Poster', linoryt:'Linocut',  rzezba:'Sculpture', inne:'Other' },
+};
+
+function getCatLabel(cat){ return (catLabelsI18n[currentLang] || catLabelsI18n.pl)[cat] || cat; }
+
+function setLang(lang){
+  currentLang = lang;
+  document.getElementById('btnPL').classList.toggle('active', lang === 'pl');
+  document.getElementById('btnEN').classList.toggle('active', lang === 'en');
+  // translate static elements
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const val = t(el.dataset.i18n);
+    if(val) el.innerHTML = val;
+  });
+  // re-render dynamic parts
+  buildCatButtons();
+  renderShowcase();
+}
+// ─────────────────────────────────────────────────────────
 // ══════════════════════════════════════════════════════════
 // ДЛЯ ДОДАВАННЯ НОВОЇ РОБОТИ — просто додай рядок:
 //
@@ -1041,10 +1189,10 @@ const rawProjects = [
   ['1ZeLZssJpuPoohH0hHhovbk8IvUTBFT3N', 'rzezba'],
   ['1H5fohkachLB475tUA-nfwEPPop426PV6', 'rzezba'],
   // Logo
-  ['1pLPLEqDaeVFu01Gleb25_l20VwdzDIyX', 'logo'],
   ['1KewNW9YC1wtvgdGvKVCddL8b__aFJ7Ik', 'logo'],
   ['1Wl7HhzWDojNr9OzwqgeR69y4xZ4m2l9I', 'logo'],
   ['1WJaWpxXlOP1TRAFFFrY6F4V5aBuqIrtb', 'logo'],
+  ['1pLPLEqDaeVFu01Gleb25_l20VwdzDIyX', 'logo'],
   ['1MOlmX1H0cJQHIpM4md1jFHkc7vhymB1p', 'logo'],
   ['12yugSj6augy-sJJlG62ThaL7z4SvcI5T', 'logo'],
   ['1-pAzVF6u4qN3LW4V3qN_Wl1-4IxXJ7Ed', 'logo'],
@@ -1103,11 +1251,12 @@ function buildCatButtons(){
   const order = ['all','3d','digital','malarstwo','rysunek','animacja','logo','plakat','linoryt','rzezba','inne'];
   order.forEach(cat => {
     const count = cat === 'all' ? projects.length : projects.filter(p => p.cat === cat).length;
-    if(count === 0) return; // hide empty categories
+    if(count === 0) return;
     const btn = document.createElement('button');
     btn.className = 'cat-btn' + (cat === 'all' ? ' active' : '');
     btn.dataset.cat = cat;
-    btn.textContent = `${catMeta[cat]} (${count})`;
+    const label = cat === 'all' ? t('cat.all') : getCatLabel(cat);
+    btn.textContent = `${label} (${count})`;
     btn.addEventListener('click', () => filterToCategory(cat));
     wrap.appendChild(btn);
   });
@@ -1126,18 +1275,17 @@ function renderShowcase(){
   catOrder.forEach(cat => {
     const catProjects = projects.filter(p => p.cat === cat);
     if(!catProjects.length) return;
-    const p = catProjects[0]; // перша робота категорії
-    const label = catLabels[cat] || cat;
-    const isVideo = p.type === 'video';
+    const p = catProjects[0];
+    const label = getCatLabel(cat);
 
     const div = document.createElement('div');
     div.className = 'showcase-item';
     div.innerHTML = `
       <img src="${gdUrl(p.id)}" alt="${label}" loading="lazy">
       <div class="showcase-overlay">
-        <div class="showcase-cat-label">Kategoria</div>
+        <div class="showcase-cat-label">${t('showcase.cat')}</div>
         <div class="showcase-cat-name">${label}</div>
-        <div class="showcase-count">${catProjects.length} ${catProjects.length === 1 ? 'praca' : catProjects.length < 5 ? 'prace' : 'prac'}</div>
+        <div class="showcase-count">${catProjects.length} ${worksPlural(catProjects.length)}</div>
       </div>
       <div class="showcase-arrow">
         <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1188,7 +1336,7 @@ function renderGallery(items){
       <img src="${gdUrl(p.id)}" alt="${p.title}" loading="lazy">
       ${isVideo ? `<div class="video-badge"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><polygon points="5,3 19,12 5,21"/></svg></div>` : ''}
       <div class="gallery-overlay">
-        <div class="item-cat">${p.catLabel}</div>
+        <div class="item-cat">${getCatLabel(p.cat)}</div>
         <div class="item-title">${p.title}</div>
       </div>
       <div class="item-expand">
@@ -1214,7 +1362,7 @@ function filterToCategory(cat){
     b.classList.toggle('active', b.dataset.cat === cat);
   });
   filtered = cat === 'all' ? [...projects] : projects.filter(p => p.cat === cat);
-  const label = cat === 'all' ? 'Wszystkie prace' : (catLabels[cat] || cat);
+  const label = cat === 'all' ? t('cat.all') + ' ' + t('gallery.works') : getCatLabel(cat);
   document.getElementById('fullGalleryTitle').textContent = label + ' (' + filtered.length + ')';
 
   const grid = document.getElementById('galleryGrid');
@@ -1257,8 +1405,8 @@ function openLb(idx){
     img.onload = () => { img.style.transition = 'opacity .3s'; img.style.opacity = '1'; };
   }
 
-  document.getElementById('lbTag').textContent = p.catLabel;
-  document.getElementById('lbTitle').textContent = p.title;
+  document.getElementById('lbTag').textContent = getCatLabel(p.cat);
+  document.getElementById('lbClose').innerHTML = t('lb.close');
   document.getElementById('lbCounter').textContent = `${idx+1} / ${filtered.length}`;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
