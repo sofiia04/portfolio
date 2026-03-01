@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofiia Vorona — Graphic Designer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+/* ── FOREST DARK PALETTE ── */
+:root {
+  --bg:        #1C2020;
+  --surface:   #232928;
+  --surface2:  #2A3230;
+  --green:     #6BBF72;
+  --green-dim: #3D7A45;
+  --green-pale:#A8D8AC;
+  --text:      #D4E8D0;      /* основний текст — світло-зелений */
+  --secondary: #8EAF8A;      /* вторинний — добре читається */
+  --muted:     #5A7A58;      /* підписи, мета */
+  --white:     #EEF7EC;
+  --accent:    #C8E84A;      /* лаймовий акцент */
+  --border:    rgba(107,191,114,.18);
+}
+
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; overflow-x:hidden; }
+
+body {
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Cormorant Garamond', Georgia, serif;
+  font-size:20px;
+  line-height:1.65;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+#cursor {
+  position:fixed; width:12px; height:12px;
+  background:var(--green); border-radius:50%;
+  pointer-events:none; z-index:9999;
+  left:-20px; top:-20px;
+  transition:width .18s, height .18s, background .18s;
+}
+#cursorRing {
+  position:fixed; width:38px; height:38px;
+  border:1.5px solid var(--green); border-radius:50%;
+  pointer-events:none; z-index:9998;
+  left:-40px; top:-40px;
+  transition:width .3s, height .3s, border-color .3s, opacity .3s;
+  opacity:.7;
+}
+#cursor.h  { width:7px; height:7px; background:var(--accent); }
+#cursorRing.h { width:54px; height:54px; border-color:var(--accent); opacity:1; }
+
+/* ── NAV ── */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  padding:22px 60px;
+  display:flex; justify-content:space-between; align-items:center;
+  background:rgba(14,18,16,.97);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.nav-logo {
+  font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400;
+  letter-spacing:.2em; color:var(--white); text-transform:uppercase; text-decoration:none;
+}
+.nav-links { display:flex; gap:40px; list-style:none; }
+.nav-links a {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--secondary); text-decoration:none;
+  transition:color .25s;
+}
+.nav-links a:hover { color:var(--green); }
+
+/* ── HERO ── */
+.hero {
+  min-height:100vh; display:grid; grid-template-columns:1fr 1fr;
+  position:relative; overflow:hidden;
+}
+.hero-left {
+  display:flex; flex-direction:column; justify-content:center;
+  padding:130px 56px 80px 80px; position:relative; z-index:2;
+}
+.hero-eyebrow {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.28em;
+  text-transform:uppercase; color:var(--green); margin-bottom:28px;
+  display:flex; align-items:center; gap:16px;
+}
+.hero-eyebrow::before { content:''; width:40px; height:1px; background:var(--green); }
+
+.hero-title {
+  font-size:clamp(60px,7.5vw,100px); font-weight:300; line-height:1.02;
+  color:var(--white); margin-bottom:8px; letter-spacing:-.01em;
+}
+.hero-title em { font-style:italic; color:var(--green); }
+
+.hero-subtitle {
+  font-size:clamp(16px,1.8vw,22px); font-weight:300;
+  color:var(--secondary); letter-spacing:.05em; margin-bottom:32px;
+}
+
+.hero-desc {
+  font-size:18px; color:var(--text); max-width:420px;
+  line-height:1.85; margin-bottom:52px;
+}
+
+.hero-cta { display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
+
+.btn-primary {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--bg); background:var(--green); border:none;
+  padding:16px 36px; cursor:none; text-decoration:none;
+  transition:background .3s, transform .2s; display:inline-block;
+}
+.btn-primary:hover { background:var(--accent); transform:translateY(-2px); }
+
+.btn-secondary {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--green); text-decoration:none;
+  border-bottom:1px solid var(--green-dim); padding-bottom:3px;
+  transition:color .3s, border-color .3s;
+}
+.btn-secondary:hover { color:var(--white); border-color:var(--white); }
+
+/* HERO RIGHT — photo */
+.hero-right {
+  position:relative; overflow:hidden;
+  background:var(--surface);
+}
+.hero-photo {
+  width:100%; height:100%;
+  object-fit:cover; object-position:center top;
+  display:block;
+  filter:saturate(0.85) contrast(1.05);
+  transition:transform 8s ease;
+}
+.hero-right::after {
+  content:'';
+  position:absolute; inset:0;
+  background:
+    linear-gradient(to right, var(--bg) 0%, transparent 25%),
+    linear-gradient(to top, var(--bg) 0%, transparent 35%);
+}
+
+.hero-stats {
+  position:absolute; bottom:48px; right:48px; z-index:3;
+  display:flex; gap:40px;
+}
+.stat-item { text-align:right; }
+.stat-number {
+  font-family:'Cormorant Garamond',serif; font-size:52px; font-weight:300;
+  color:var(--white); line-height:1;
+}
+.stat-label {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--secondary);
+}
+
+.scroll-indicator {
+  position:absolute; bottom:44px; left:80px;
+  display:flex; align-items:center; gap:12px; z-index:3;
+}
+.scroll-line {
+  width:1px; height:60px;
+  background:linear-gradient(to bottom, transparent, var(--green-dim));
+  animation:scrollPulse 2.2s ease-in-out infinite;
+}
+@keyframes scrollPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+.scroll-text {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--secondary); writing-mode:vertical-rl;
+}
+
+/* ── MARQUEE — discrete strip ── */
+.marquee-wrap {
+  overflow:hidden; white-space:nowrap;
+  background:var(--surface2);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.marquee-track { display:inline-flex; animation:marquee 30s linear infinite; }
+.marquee-item {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--muted); padding:13px 32px;
+}
+.marquee-sep { color:var(--green-dim); align-self:center; font-size:10px; }
+@keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── CATEGORIES ── */
+.categories {
+  position:sticky; top:0; z-index:150;
+  background:rgba(14,18,16,.98); backdrop-filter:blur(16px);
+  border-bottom:2px solid var(--border);
+  padding:0 60px;
+  box-shadow:0 6px 32px rgba(0,0,0,.5);
+}
+.categories-inner {
+  display:flex; overflow-x:auto; scrollbar-width:none;
+}
+.categories-inner::-webkit-scrollbar { display:none; }
+.cat-btn {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--secondary);
+  background:none; border:none; border-bottom:2px solid transparent;
+  padding:20px 20px 18px; cursor:none; margin-bottom:-2px;
+  transition:color .25s, border-color .25s; white-space:nowrap; flex-shrink:0;
+}
+.cat-btn:hover { color:var(--text); }
+.cat-btn.active { color:var(--green); border-bottom-color:var(--green); font-weight:400; }
+
+/* ── GALLERY ── */
+#gallery-section { padding:56px 60px 100px; }
+
+.gallery-header {
+  display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:48px;
+}
+.section-tag {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.26em;
+  text-transform:uppercase; color:var(--green); margin-bottom:10px;
+}
+.section-title {
+  font-size:clamp(36px,4vw,58px); font-weight:300; color:var(--white); line-height:1.08;
+}
+.section-title em { font-style:italic; color:var(--green); }
+.gallery-count {
+  font-family:'DM Mono',monospace; font-size:11px;
+  letter-spacing:.14em; color:var(--secondary); text-transform:uppercase;
+  text-align:right;
+}
+.gallery-count span { font-family:'Cormorant Garamond',serif; font-size:40px; color:var(--green-dim); line-height:1; display:block; }
+
+.gallery-grid {
+  columns:3; column-gap:16px;
+  transition:opacity .3s ease, transform .3s ease;
+}
+@media(max-width:1100px){ .gallery-grid { columns:2; } }
+@media(max-width:600px) { .gallery-grid { columns:1; } }
+
+.gallery-item {
+  break-inside:avoid; margin-bottom:16px;
+  position:relative; overflow:hidden; cursor:none;
+  background:var(--surface);
+}
+.gallery-item img {
+  width:100%; display:block;
+  transition:transform .6s cubic-bezier(.25,.46,.45,.94), filter .4s;
+  filter:saturate(0.9);
+}
+.gallery-item:hover img { transform:scale(1.06); filter:saturate(1.1); }
+
+.gallery-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(to top, rgba(14,18,16,.93) 0%, rgba(14,18,16,.15) 55%, transparent 100%);
+  opacity:0; transition:opacity .35s;
+  display:flex; flex-direction:column; justify-content:flex-end; padding:24px 20px;
+}
+.gallery-item:hover .gallery-overlay { opacity:1; }
+
+.item-cat {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--green); margin-bottom:4px;
+}
+.item-title { font-size:20px; font-weight:300; color:var(--white); line-height:1.2; }
+
+.item-expand {
+  position:absolute; top:14px; right:14px;
+  width:38px; height:38px; border:1px solid rgba(107,191,114,.45);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s, background .3s; cursor:none;
+}
+.gallery-item:hover .item-expand { opacity:1; }
+.item-expand:hover { background:var(--green); border-color:var(--green); }
+.item-expand svg { width:15px; height:15px; stroke:var(--white); fill:none; }
+.item-expand:hover svg { stroke:var(--bg); }
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  position:fixed; inset:0; z-index:1000;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .4s;
+}
+.lightbox.open { opacity:1; pointer-events:all; }
+#lbBg {
+  position:absolute; inset:0;
+  background:rgba(36,44,42,.98); backdrop-filter:blur(16px);
+}
+.lightbox-content {
+  position:relative; z-index:2;
+  display:flex; align-items:flex-start; gap:36px;
+  max-width:92vw; max-height:92vh;
+  transform:scale(.95); transition:transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+.lightbox.open .lightbox-content { transform:scale(1); }
+
+.lb-img-wrap { position:relative; flex-shrink:0; max-width:70vw; max-height:85vh; overflow:hidden; }
+#lbImg { display:block; max-width:70vw; max-height:85vh; object-fit:contain; box-shadow:0 32px 100px rgba(0,0,0,.6); outline: 1px solid rgba(107,191,114,.15); }
+
+.lb-arrow {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:48px; height:48px; background:rgba(14,18,16,.75);
+  border:1px solid var(--border); display:flex;
+  align-items:center; justify-content:center; cursor:none;
+  transition:background .3s, border-color .3s; z-index:2;
+}
+.lb-arrow:hover { background:var(--green); border-color:var(--green); }
+.lb-arrow:hover svg { stroke:var(--bg); }
+.lb-arrow svg { width:18px; height:18px; stroke:var(--text); fill:none; }
+.lb-prev { left:14px; }
+.lb-next { right:14px; }
+
+.lb-info { min-width:200px; max-width:240px; padding-top:8px; flex-shrink:0; }
+#lbClose {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--secondary); background:none; border:none;
+  cursor:none; transition:color .3s; margin-bottom:28px; display:block;
+}
+#lbClose:hover { color:var(--green); }
+#lbTag {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--green); margin-bottom:12px;
+}
+#lbTitle { font-size:32px; font-weight:300; color:var(--white); line-height:1.15; margin-bottom:14px; }
+#lbCounter {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:.14em; color:var(--secondary);
+}
+
+/* ── ABOUT ── */
+#about {
+  background:var(--surface); padding:100px 80px;
+  display:grid; grid-template-columns:1fr 1.35fr; gap:100px; align-items:center;
+}
+.about-img-wrap { position:relative; }
+.about-img-wrap::before {
+  content:''; position:absolute; top:-16px; left:-16px; right:16px; bottom:16px;
+  border:1px solid var(--green-dim); z-index:0;
+}
+.about-photo {
+  position:relative; z-index:1; width:100%; aspect-ratio:3/4;
+  object-fit:cover; object-position:center top; display:block;
+  filter:saturate(0.85) contrast(1.05);
+}
+.about-badge {
+  position:absolute; bottom:-24px; right:-24px; z-index:2;
+  width:130px; height:130px; border:1px solid var(--border);
+  background:var(--surface); display:flex; align-items:center; justify-content:center;
+}
+.about-badge-text {
+  font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--secondary); text-align:center; line-height:2;
+}
+.about-text {
+  font-size:19px; color:var(--text); line-height:1.85; margin-bottom:22px;
+}
+.skills-wrap { margin-top:36px; }
+.skills-label {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--secondary); margin-bottom:14px;
+}
+.skills-list { display:flex; flex-wrap:wrap; gap:8px; }
+.skill-tag {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--green); border:1px solid var(--green-dim);
+  padding:7px 14px; transition:background .2s, color .2s;
+}
+.skill-tag:hover { background:var(--green); color:var(--bg); }
+
+/* ── SERVICES ── */
+#services { padding:100px 60px; }
+.services-intro { margin-bottom:56px; }
+
+.services-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:1px; background:var(--border);
+  border:1px solid var(--border);
+}
+.service-item {
+  background:var(--bg); position:relative;
+  overflow:hidden; transition:background .3s;
+  cursor:none;
+  display:flex; flex-direction:column;
+}
+.service-item:hover { background:var(--surface); }
+
+.service-num {
+  font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:300;
+  color:rgba(107,191,114,.1); line-height:1; margin-bottom:16px;
+  transition:color .3s;
+}
+.service-item:hover .service-num { color:rgba(107,191,114,.22); }
+
+.service-line {
+  width:32px; height:1.5px; background:var(--green-dim); margin-bottom:20px;
+  transition:width .4s, background .3s;
+}
+.service-item:hover .service-line { width:56px; background:var(--green); }
+
+.service-name {
+  font-size:22px; font-weight:300; color:var(--white); line-height:1.25; margin-bottom:14px;
+}
+.service-desc {
+  font-size:15px; color:var(--secondary); line-height:1.75;
+}
+
+/* service card preview image */
+.service-preview {
+  width:100%; aspect-ratio:16/9;
+  object-fit:cover; display:block;
+  margin-bottom:0;
+  filter:saturate(.8) brightness(.85);
+  transition:filter .4s, transform .5s cubic-bezier(.25,.46,.45,.94);
+}
+.service-item:hover .service-preview {
+  filter:saturate(1.1) brightness(1);
+  transform:scale(1.04);
+}
+.service-preview-wrap {
+  overflow:hidden; width:100%; aspect-ratio:16/9;
+  margin-bottom:0; flex-shrink:0;
+}
+.service-body {
+  padding:28px 32px 32px;
+}
+
+/* service item — посилання на галерею за категорією */
+.service-cat-link {
+  display:inline-flex; align-items:center; gap:8px; margin-top:20px;
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--green); text-decoration:none;
+  border-bottom:1px solid var(--green-dim); padding-bottom:2px;
+  transition:color .25s, border-color .25s;
+}
+.service-cat-link:hover { color:var(--accent); border-color:var(--accent); }
+.service-cat-link::after { content:'→'; }
+
+/* ── CV ── */
+#cv { padding:100px 80px; }
+.cv-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; margin-top:56px; }
+.cv-col-title {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--green); margin-bottom:36px;
+}
+.timeline { position:relative; padding-left:40px; }
+.timeline::before {
+  content:''; position:absolute; left:0; top:8px; bottom:0;
+  width:1px; background:linear-gradient(to bottom, var(--green), transparent);
+}
+.timeline-item { position:relative; margin-bottom:52px; }
+.timeline-item::before {
+  content:''; position:absolute; left:-44px; top:10px;
+  width:8px; height:8px; background:var(--green); border-radius:50%;
+}
+.t-date {
+  font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--secondary); margin-bottom:6px;
+}
+.t-role { font-size:26px; font-weight:300; color:var(--white); margin-bottom:3px; }
+.t-company {
+  font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--secondary);
+}
+
+/* ── CONTACT ── */
+#contact {
+  background:var(--surface); padding:100px 80px; min-height:50vh;
+  display:flex; flex-direction:column; justify-content:center;
+  position:relative; overflow:hidden; text-align:center;
+}
+#contact::before {
+  content:'KONTAKT'; position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%); font-family:'Cormorant Garamond',serif;
+  font-size:20vw; font-weight:300; color:rgba(107,191,114,.025);
+  white-space:nowrap; pointer-events:none; user-select:none;
+}
+.contact-heading {
+  font-size:clamp(48px,6vw,84px); font-weight:300; color:var(--white);
+  line-height:1.08; margin-bottom:48px; position:relative; z-index:1;
+}
+.contact-heading em { font-style:italic; color:var(--green); }
+.contact-links {
+  display:flex; justify-content:center; gap:48px;
+  flex-wrap:wrap; position:relative; z-index:1;
+}
+.contact-link {
+  font-family:'DM Mono',monospace; font-size:12px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--secondary); text-decoration:none;
+  transition:color .3s; display:flex; align-items:center; gap:12px;
+}
+.contact-link::before { content:'→'; color:var(--green); font-size:14px; }
+.contact-link:hover { color:var(--green); }
+
+/* ── FOOTER ── */
+footer {
+  background:var(--bg); padding:32px 60px;
+  display:flex; justify-content:space-between; align-items:center;
+  border-top:1px solid var(--border);
+}
+.footer-copy {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:.13em; color:var(--secondary);
+}
+.footer-langs {
+  font-family:'DM Mono',monospace; font-size:10px;
+  letter-spacing:.13em; color:var(--secondary);
+}
+
+/* ── SCROLL ANIMATIONS ── */
+.fade-up { opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease; }
+.fade-up.visible { opacity:1; transform:translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media(max-width:1100px){
+  .hero { grid-template-columns:1fr; }
+  .hero-right { display:none; }
+  .hero-left { padding:120px 40px 80px; }
+  .scroll-indicator { left:40px; }
+  nav { padding:20px 40px; }
+  .categories { padding:0 40px; }
+  #gallery-section { padding:48px 40px 80px; }
+  #about { grid-template-columns:1fr; gap:56px; padding:80px 40px; }
+  .services-grid { grid-template-columns:repeat(2,1fr); }
+  #services { padding:80px 40px; }
+  .cv-grid { grid-template-columns:1fr; gap:48px; }
+  #cv { padding:80px 40px; }
+  #contact { padding:80px 40px; }
+  footer { padding:28px 40px; }
+}
+@media(max-width:640px){
+  .nav-links { display:none; }
+  nav { padding:18px 24px; }
+  .categories { padding:0 20px; }
+  #gallery-section { padding:36px 20px 60px; }
+  #about { padding:60px 24px; }
+  #services { padding:60px 24px; }
+  .services-grid { grid-template-columns:1fr; }
+  #cv { padding:60px 24px; }
+  #contact { padding:60px 24px; }
+  footer { padding:24px; flex-direction:column; gap:10px; text-align:center; }
+  .contact-links { flex-direction:column; align-items:center; gap:24px; }
+  .hero-stats { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- CURSORS -->
+<div id="cursor"></div>
+<div id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Sofiia Vorona</a>
+  <ul class="nav-links">
+    <li><a href="#gallery-section">Galeria</a></li>
+    <li><a href="#about">O mnie</a></li>
+    <li><a href="#services">Usługi</a></li>
+    <li><a href="#cv">CV</a></li>
+    <li><a href="#contact">Kontakt</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Graphic Designer — Poznań</div>
+    <h1 class="hero-title">Sofiia<br><em>Vorona</em></h1>
+    <p class="hero-subtitle">Ilustracja · Branding · Animacja · 3D</p>
+    <p class="hero-desc">Tworzę projekty, przez które można poczuć emocję, nastrój, charakter. Łączę kreatywność z funkcjonalnością i klarowną komunikacją wizualną.</p>
+    <div class="hero-cta">
+      <a href="#gallery-section" class="btn-primary">Zobacz prace</a>
+      <a href="#contact" class="btn-secondary">Kontakt</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <img class="hero-photo"
+         src="https://lh3.googleusercontent.com/d/1hk6yXWrETWXNme_RQ1Gi3QDQQRbZ-pwP"
+         alt="Sofiia Vorona">
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number">85</div>
+      <div class="stat-label">Prac w portfolio</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">10</div>
+      <div class="stat-label">Kategorii</div>
+    </div>
+  </div>
+
+  <div class="scroll-indicator">
+    <div class="scroll-line"></div>
+    <span class="scroll-text">Scroll</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">3D Design</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Digital Art</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Malarstwo Olejne</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Animacja 2D</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Logo & Branding</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Plakat</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Linoryt</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Rzeźba</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Rysunek Ołówkiem</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Wydawnictwo</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">3D Design</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Digital Art</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Malarstwo Olejne</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Animacja 2D</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Logo & Branding</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Plakat</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Linoryt</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Rzeźba</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Rysunek Ołówkiem</span><span class="marquee-sep">✦</span>
+    <span class="marquee-item">Wydawnictwo</span><span class="marquee-sep">✦</span>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<div class="categories" id="categories">
+  <div class="categories-inner">
+    <button class="cat-btn active" data-cat="all">Wszystkie (85)</button>
+    <button class="cat-btn" data-cat="3d">3D (10)</button>
+    <button class="cat-btn" data-cat="digital">Digital (16)</button>
+    <button class="cat-btn" data-cat="malarstwo">Malarstwo (8)</button>
+    <button class="cat-btn" data-cat="rysunek">Rysunek (19)</button>
+    <button class="cat-btn" data-cat="animacja">Animacja (2)</button>
+    <button class="cat-btn" data-cat="logo">Logo (8)</button>
+    <button class="cat-btn" data-cat="plakat">Plakat (6)</button>
+    <button class="cat-btn" data-cat="linoryt">Linoryt (3)</button>
+    <button class="cat-btn" data-cat="rzezba">Rzeźba (9)</button>
+    <button class="cat-btn" data-cat="inne">Inne (4)</button>
+  </div>
+</div>
+
+<!-- GALLERY -->
+<section id="gallery-section">
+  <div class="gallery-header fade-up">
+    <div>
+      <div class="section-tag">Portfolio</div>
+      <h2 class="section-title">Wybrane<br><em>Prace</em></h2>
+    </div>
+    <div class="gallery-count"><span id="countNum">85</span>&nbsp;prac</div>
+  </div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div id="lbBg"></div>
+  <div class="lightbox-content">
+    <div class="lb-img-wrap">
+      <img id="lbImg" src="" alt="">
+      <button class="lb-arrow lb-prev" id="lbPrev">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <button class="lb-arrow lb-next" id="lbNext">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="lb-info">
+      <button id="lbClose">✕ &nbsp;Zamknij</button>
+      <div id="lbTag"></div>
+      <div id="lbTitle"></div>
+      <div id="lbCounter"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-img-wrap fade-up">
+    <img class="about-photo"
+         src="https://lh3.googleusercontent.com/d/1hk6yXWrETWXNme_RQ1Gi3QDQQRbZ-pwP"
+         alt="Sofiia Vorona">
+    <div class="about-badge">
+      <div class="about-badge-text">Based<br>in<br>Poznań<br>🇵🇱 🇺🇦</div>
+    </div>
+  </div>
+
+  <div class="fade-up">
+    <div class="section-tag">O mnie</div>
+    <h2 class="section-title" style="margin-bottom:28px;">Tworzę<br><em>z emocją</em></h2>
+    <p class="about-text">Nazywam się Sofiia i specjalizuję się w projektowaniu graficznym. Od ponad trzech lat mieszkam w Poznaniu, gdzie ukończyłam studia w Collegium Da Vinci.</p>
+    <p class="about-text">W projektowaniu łączę kreatywność z funkcjonalnością, dbając o estetykę, spójność wizualną i klarowną komunikację. Najważniejsze jest to, żeby przez design można było poczuć emocję, nastrój, charakter.</p>
+    <div class="skills-wrap">
+      <div class="skills-label">Narzędzia</div>
+      <div class="skills-list">
+        <span class="skill-tag">Photoshop</span>
+        <span class="skill-tag">Illustrator</span>
+        <span class="skill-tag">InDesign</span>
+        <span class="skill-tag">CorelDRAW</span>
+        <span class="skill-tag">Procreate</span>
+        <span class="skill-tag">Blender</span>
+        <span class="skill-tag">After Effects</span>
+        <span class="skill-tag">PL · UA · EN</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="services-intro fade-up">
+    <div class="section-tag">Zakres usług</div>
+    <h2 class="section-title">Co<br><em>robię</em></h2>
+  </div>
+  <div class="services-grid fade-up">
+
+    <div class="service-item" onclick="filterToCategory('rysunek')">
+      <div class="service-preview-wrap">
+        <img class="service-preview"
+             src="https://lh3.googleusercontent.com/d/1itEayMVipwSYXMKkTPjIkRdUvvQ5kLPa"
+             alt="Ilustracja" loading="lazy">
+      </div>
+      <div class="service-body">
+        <div class="service-num">01</div>
+        <div class="service-line"></div>
+        <div class="service-name">Ilustracja<br>& Postacie</div>
+        <div class="service-desc">Cyfrowe ilustracje, projekty postaci, rysunek ołówkiem i kolorowy — od szkicu po gotowy plik.</div>
+        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('rysunek')">Zobacz prace &nbsp;</a>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="filterToCategory('logo')">
+      <div class="service-preview-wrap">
+        <img class="service-preview"
+             src="https://lh3.googleusercontent.com/d/1WJaWpxXlOP1TRAFFFrY6F4V5aBuqIrtb"
+             alt="Logo & Branding" loading="lazy">
+      </div>
+      <div class="service-body">
+        <div class="service-num">02</div>
+        <div class="service-line"></div>
+        <div class="service-name">Logo<br>& Branding</div>
+        <div class="service-desc">Logotypy, identyfikacja wizualna, plakaty i kompleksowy branding dla firm i projektów.</div>
+        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('logo')">Zobacz prace &nbsp;</a>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="filterToCategory('animacja')">
+      <div class="service-preview-wrap">
+        <img class="service-preview"
+             src="https://lh3.googleusercontent.com/d/1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA"
+             alt="Animacja & 3D" loading="lazy">
+      </div>
+      <div class="service-body">
+        <div class="service-num">03</div>
+        <div class="service-line"></div>
+        <div class="service-name">Animacja<br>& 3D</div>
+        <div class="service-desc">Animacje 2D frame by frame, modelowanie i wizualizacje 3D, motion graphics.</div>
+        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('animacja')">Zobacz prace &nbsp;</a>
+      </div>
+    </div>
+
+    <div class="service-item" onclick="filterToCategory('plakat')">
+      <div class="service-preview-wrap">
+        <img class="service-preview"
+             src="https://lh3.googleusercontent.com/d/16HcLb173v1qCdsv8V-4nmOCQWFMfxoC3"
+             alt="Druk & Wydawnictwo" loading="lazy">
+      </div>
+      <div class="service-body">
+        <div class="service-num">04</div>
+        <div class="service-line"></div>
+        <div class="service-name">Druk<br>& Wydawnictwo</div>
+        <div class="service-desc">Projekty do druku: wizytówki, odzież, publikacje, książki, materiały promocyjne.</div>
+        <a href="#gallery-section" class="service-cat-link" onclick="event.stopPropagation(); filterToCategory('plakat')">Zobacz prace &nbsp;</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CV -->
+<section id="cv">
+  <div class="fade-up">
+    <div class="section-tag">Doświadczenie</div>
+    <h2 class="section-title">Droga<br><em>zawodowa</em></h2>
+  </div>
+  <div class="cv-grid fade-up">
+    <div>
+      <div class="cv-col-title">Praca</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="t-date">2023 – obecnie</div>
+          <div class="t-role">Graphic Designer</div>
+          <div class="t-company">Freelance</div>
+        </div>
+        <div class="timeline-item">
+          <div class="t-date">2022 – 2023</div>
+          <div class="t-role">Graphic Designer</div>
+          <div class="t-company">NeoFox</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="cv-col-title">Edukacja</div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="t-date">2022 – 2025</div>
+          <div class="t-role">Grafik Designer</div>
+          <div class="t-company">Collegium Da Vinci, Poznań</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-tag fade-up" style="text-align:center; margin-bottom:20px;">Napisz do mnie</div>
+  <h2 class="contact-heading fade-up">Zróbmy coś<br><em>razem</em></h2>
+  <div class="contact-links fade-up">
+    <a href="/cdn-cgi/l/email-protection#483b272e212129663e273a2726297a78787c082f25292124662b2725" class="contact-link"><span class="__cf_email__" data-cfemail="f1829e97989890df879e839e9f90c3c1c1c5b1969c90989ddf929e9c">[email&#160;protected]</span></a>
+    <a href="tel:+48539797404" class="contact-link">+48 539 797 404</a>
+    <a href="https://www.linkedin.com/in/sofiia-vorona-b83008313/" target="_blank" class="contact-link">LinkedIn</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2025 Sofiia Vorona — Graphic Designer, Poznań</div>
+  <div class="footer-langs">PL · UA · EN</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── PROJECTS DATA ──────────────────────────────────────────
+const projects = [
+  { id:'1q464T4sbob9uAWefvJzhZrMru-srhnMZ', cat:'3d', catLabel:'3D', title:'Kompozycja Geometryczna I' },
+  { id:'1gfqp3-B-7PhoVtNLAT9loSR9GBfwC-WB', cat:'3d', catLabel:'3D', title:'Kompozycja Geometryczna II' },
+  { id:'1lYJ7Wp-AZjM2rHHIVG59w88tjUGeFgUn', cat:'3d', catLabel:'3D', title:'Forma Organiczna' },
+  { id:'1ua7RgXnxVdF4NmDucKoeGfwJszeGbM9-', cat:'3d', catLabel:'3D', title:'Abstrakcja Przestrzenna' },
+  { id:'1HXpOO68VIhBit7oiweV3XGx6Oj2WL02O', cat:'3d', catLabel:'3D', title:'Studium Światła' },
+  { id:'1JzmcIwb6DJjEvwFhdSYwlil2PUBfbRFf', cat:'3d', catLabel:'3D', title:'Bryła Architektoniczna' },
+  { id:'1wve4DaE-YhSv14-SzxIR3FdOgFA1AuDF', cat:'3d', catLabel:'3D', title:'Wizualizacja Produktu' },
+  { id:'1QwZnTgdVGCIU-ZYsF-k7daCSsboaHjnh', cat:'3d', catLabel:'3D', title:'Rzeźba Cyfrowa' },
+  { id:'1u8nRz-ebnttP_M1B_E7HLwAkbH8CMj4O', cat:'3d', catLabel:'3D', title:'Struktura Modularna' },
+  { id:'1Pc9um7JygcUSGXa61KlJbt61BVXEW88y', cat:'3d', catLabel:'3D', title:'Projekt Koncepcyjny 3D' },
+  { id:'1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa I' },
+  { id:'11RVgCsmlIzhi0ir-K9cHyuDIatCKA0v_', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa II' },
+  { id:'1Oim3JB30MTGw29wJ7_MxBJhjI_m3swsY', cat:'digital', catLabel:'Digital', title:'Portret Ekspresyjny' },
+  { id:'1RRlhHzSjX8JqKiGrrXVWmvbpVzcWXAyz', cat:'digital', catLabel:'Digital', title:'Ilustracja Narracyjna' },
+  { id:'15DjwvwJg8z3S0sgf-5tISYBulNWoZgnS', cat:'digital', catLabel:'Digital', title:'Postać Fantastyczna' },
+  { id:'1Z6XbrHrA6r77fHVdwJ1EtrA926pp0tag', cat:'digital', catLabel:'Digital', title:'Pejzaż Cyfrowy' },
+  { id:'1EVutHkmYjhDaH8F-dG0L6jt71QpLfMPa', cat:'digital', catLabel:'Digital', title:'Scena Emocjonalna' },
+  { id:'1AB4H35bRZwQVfx-1PDf3u23IUDMrdjUk', cat:'digital', catLabel:'Digital', title:'Projekt Postaci' },
+  { id:'1IAiajobx8Ae4DVThKuuV63VEgLlN3317', cat:'digital', catLabel:'Digital', title:'Concept Art I' },
+  { id:'1eYYOWfznCFwT7gXGF5-Ja8daizQqFcfO', cat:'digital', catLabel:'Digital', title:'Concept Art II' },
+  { id:'1a2NIrA-7zBSZDh9WEJoCeOApqxjyTxdA', cat:'digital', catLabel:'Digital', title:'Studium Postaci' },
+  { id:'1DztrFryI_J0LzwBevY41V9XAzv_hKggw', cat:'digital', catLabel:'Digital', title:'Fan Art' },
+  { id:'1WscNxWkLN2GjUI5xG28e2vV9tByEqWU2', cat:'digital', catLabel:'Digital', title:'Ilustracja Bajkowa' },
+  { id:'1XBBXeuffJXPVdOwFLSffBBnWyWTvj1ZH', cat:'digital', catLabel:'Digital', title:'Świat Alternatywny' },
+  { id:'16mv8lEmcuLMw_ihc1IGmrjXwkq9H6iz2', cat:'digital', catLabel:'Digital', title:'Projekt Środowiska' },
+  { id:'12YXOY0XQhRjTaxgoMDODxA_AmW3Gjz-U', cat:'digital', catLabel:'Digital', title:'Kolaż Cyfrowy' },
+  { id:'1vZI1oLfPtx7TylDFhlZgEeDIWX_D2AGh', cat:'digital', catLabel:'Digital', title:'Ekspresja Barwna' },
+  { id:'1I5EKsCCJWmCrX93Mb6_BFKcFoc1McAHE', cat:'digital', catLabel:'Digital', title:'Portret Stylizowany' },
+  { id:'14396qgtwEGEKV0ZfsFISjKzhSexSnnf1', cat:'linoryt', catLabel:'Linoryt', title:'Odcisk I' },
+  { id:'16nTLuYqg8gl9nuxotj-yy0m9daWjFn4Y', cat:'linoryt', catLabel:'Linoryt', title:'Odcisk II' },
+  { id:'1qqWE6oWTLDdNfMczJyD8FY9-1KRHDU6J', cat:'linoryt', catLabel:'Linoryt', title:'Kompozycja Graficzna' },
+  { id:'1dvlufbQY1aC_4EuhKq_Okv5pNX2viEUz', cat:'inne', catLabel:'Akwarela', title:'Akwarela I' },
+  { id:'1KGKD2h0ZD_dBUwZav1P7HOoGgFQHBFE6', cat:'inne', catLabel:'Akwarela', title:'Akwarela II' },
+  { id:'1aEZ2PR1W_zHpRT-hvHnod-QhcyFAJ3BJ', cat:'malarstwo', catLabel:'Malarstwo Akrylowe', title:'Martwa Natura Akrylowa' },
+  { id:'1zx2fNXPonjYNQNeJ5CrWqtuQ0aEOD9m1', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Portret Olejny I' },
+  { id:'1SmrWoW7Xewke01Jw_dK23NmGudDeKn9q', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Portret Olejny II' },
+  { id:'14-uw17T5y0lvDF8gwb0zeS-yKAdFr0IH', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Martwa Natura' },
+  { id:'1Sn6eDUPm2aQVIYBhfB2Tp1o6lyFOmBRV', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Pejzaż Olejny' },
+  { id:'12tzUYOF7zAmHx4FKAK9JJ7M7iLnfhgBe', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Studium Kolorystyczne' },
+  { id:'1shWAn_J2PpE_rGkeQNcoN6QoWjPx0iRb', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Kompozycja Figuratywna' },
+  { id:'1vz5jm8szAmAa_djstdRaLYoaYpujBYsx', cat:'malarstwo', catLabel:'Malarstwo Olejne', title:'Nastrój w Oleju' },
+  { id:'1bQBThmmv8gQuy73_Z9nl99g0a2FIkmd-', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Postać w Ruchu I' },
+  { id:'1o9mHXV385OC2IJ_t5LpUR14L5Wj5shkh', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Postać w Ruchu II' },
+  { id:'1xhTSRs2feC5N4HCRD0E5ULiV0kqQpBLy', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Portret Kolorowy' },
+  { id:'1vD7MP4xyRYQFzlaWHh1ewAJ5CsZypu3V', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Ekspresja Barwna' },
+  { id:'1IQ3GbkUHuYDFbD5w3LUJeSnUWcK-VTRD', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Studia Postaci' },
+  { id:'1Nsr_muMg6uNfCYSMmYKrvTkX5VIIJZYk', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Kompozycja Figuralna' },
+  { id:'1W_ILX_LXTUBbOOaWaXsqykFCCor7z7Ps', cat:'rysunek', catLabel:'Rysunek Kolorowy', title:'Charakter Postaci' },
+  { id:'1itEayMVipwSYXMKkTPjIkRdUvvQ5kLPa', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Anatomiczne I' },
+  { id:'1EUO-yS86KlskMVnrsViXXSkTh41czvn7', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Anatomiczne II' },
+  { id:'1j-ElTM-rLQVYDvQPSOE0Z9MmZCF3WYBj', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy I' },
+  { id:'131ymu9jEMMOEPB_Fa741n1gNde5wucXr', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy II' },
+  { id:'1RBDUk-npRshEeAprySTNEhFAO8_z1u0i', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Portret Grafitowy III' },
+  { id:'1B5sthOYKCYKc5-pakyHG7zFGZi0uQ6oi', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Draperii' },
+  { id:'1MqhADGhE2uJcRO6Ayc1zsxrgwHdByOQP', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Akt Artystyczny' },
+  { id:'1WWbUX5RyDlnLjH6O4RolU0UU-9aNmH9s', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Rąk' },
+  { id:'16Lg1biB9hxnske8BzjBzJFSX04S8nkLb', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Pejzaż Grafitowy' },
+  { id:'1JF7N_yqazfvDeZzRo__CrDI1NWccYEG-', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Martwa Natura Grafitowa' },
+  { id:'1vmNw_UHfx8UwCnEu0bt1EkdYqq5MfUdB', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Studium Twarzy' },
+  { id:'17_z9jyF7xEbZHEZbDAzwKUTlCJv6n41q', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Szkic Postaci' },
+  { id:'1XhTkgRrCs6pbmzzrR1CRhE8pHqMyfLn0', cat:'rysunek', catLabel:'Rysunek Ołówkiem', title:'Kompozycja Linearna' },
+  { id:'16HcLb173v1qCdsv8V-4nmOCQWFMfxoC3', cat:'plakat', catLabel:'Plakat', title:'Plakat Kulturalny I' },
+  { id:'1OR8mLZthT84XLP4J6H9GLOQLl0ZQhfVx', cat:'plakat', catLabel:'Plakat', title:'Plakat Kulturalny II' },
+  { id:'1I1agaygD0-i9Hir79kYGfjAKgDa5IJiC', cat:'plakat', catLabel:'Plakat', title:'Plakat Eventowy' },
+  { id:'1F9V01qw1UvJX16jAgCeB8761L9ihaD9F', cat:'plakat', catLabel:'Plakat', title:'Plakat Typograficzny' },
+  { id:'1Nbxcr8c11q4pRGvcKG_2rDmw6u9FWjJt', cat:'plakat', catLabel:'Plakat', title:'Plakat Konceptualny' },
+  { id:'1OlAsv18s8Jws1Y3Sq2RTXm4-Js__p4PW', cat:'plakat', catLabel:'Plakat', title:'Plakat Artystyczny' },
+  { id:'1pSaYQ3XHcMUObnDxizIP3osP1dMQc1JQ', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Rzeźbiarska I' },
+  { id:'1Q9BvBZbej30wEnF0FHJ6NCC_sspS23dG', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Rzeźbiarska II' },
+  { id:'1jVbD936ATEvH0TKKrP30gq7nNk6czYrM', cat:'rzezba', catLabel:'Rzeźba', title:'Studium Objętości' },
+  { id:'1d6XfxI3Qo-jIIZ3-QUXHgRAADMLjtaqb', cat:'rzezba', catLabel:'Rzeźba', title:'Portret Rzeźbiarski' },
+  { id:'1k0CQM9J6B_BAVy2A4j5HzsV8bMrXHIy6', cat:'rzezba', catLabel:'Rzeźba', title:'Abstrakcja Plastyczna' },
+  { id:'1d337eYhaBAV8_X7XpSs-sjohFCuHWg74', cat:'rzezba', catLabel:'Rzeźba', title:'Relief Dekoracyjny' },
+  { id:'1Dx3ARUu0FagoVnOEUGQqGDo2esTnbciA', cat:'rzezba', catLabel:'Rzeźba', title:'Kompozycja Przestrzenna' },
+  { id:'1ZeLZssJpuPoohH0hHhovbk8IvUTBFT3N', cat:'rzezba', catLabel:'Rzeźba', title:'Forma Figuratywna' },
+  { id:'1H5fohkachLB475tUA-nfwEPPop426PV6', cat:'rzezba', catLabel:'Rzeźba', title:'Rzeźba Ekspresyjna' },
+  { id:'1DEKWVJ9zj2i8PatBzRYqp6JLlTIPvGQtAz_Il3F23YQ', cat:'inne', catLabel:'Web Design', title:'Projekt Strony WWW' },
+  { id:'1jOIAMLRxkjpEU8sIJ-dgVQWCQh3t_-ls', cat:'inne', catLabel:'Wydawnictwo', title:'Projekt Wydawniczy I' },
+  { id:'1mvD_hSn1d3ixITMNt-2oO4QSSQSP3UjA', cat:'inne', catLabel:'Wydawnictwo', title:'Projekt Wydawniczy II' },
+  { id:'1WJaWpxXlOP1TRAFFFrY6F4V5aBuqIrtb', cat:'logo', catLabel:'Logo', title:'Logotyp Minimalistyczny' },
+  { id:'1Wl7HhzWDojNr9OzwqgeR69y4xZ4m2l9I', cat:'logo', catLabel:'Logo', title:'Znak Firmowy' },
+  { id:'1KewNW9YC1wtvgdGvKVCddL8b__aFJ7Ik', cat:'logo', catLabel:'Logo', title:'Logo Emblematyczne' },
+  { id:'1pLPLEqDaeVFu01Gleb25_l20VwdzDIyX', cat:'logo', catLabel:'Logo', title:'Identyfikacja Wizualna' },
+  { id:'1MOlmX1H0cJQHIpM4md1jFHkc7vhymB1p', cat:'logo', catLabel:'Logo', title:'Brand Mark' },
+  { id:'12yugSj6augy-sJJlG62ThaL7z4SvcI5T', cat:'logo', catLabel:'Logo', title:'Logo Typograficzne' },
+  { id:'1-pAzVF6u4qN3LW4V3qN_Wl1-4IxXJ7Ed', cat:'logo', catLabel:'Logo', title:'Sygnatura Marki' },
+  { id:'1yKIrEiXXeBvJArWPls1wH-Gp8p3SFtnE', cat:'logo', catLabel:'Logo', title:'Logo Ilustracyjne' },
+];
+
+function gdUrl(id){ return `https://lh3.googleusercontent.com/d/${id}`; }
+
+// ── GALLERY ──────────────────────────────────────────────
+let filtered = [...projects];
+let currentIdx = 0;
+
+function renderGallery(items){
+  const grid = document.getElementById('galleryGrid');
+  grid.innerHTML = '';
+  document.getElementById('countNum').textContent = items.length;
+  items.forEach((p,i) => {
+    const d = document.createElement('div');
+    d.className = 'gallery-item';
+    d.innerHTML = `
+      <img src="${gdUrl(p.id)}" alt="${p.title}" loading="lazy">
+      <div class="gallery-overlay">
+        <div class="item-cat">${p.catLabel}</div>
+        <div class="item-title">${p.title}</div>
+      </div>
+      <div class="item-expand">
+        <svg viewBox="0 0 24 24" stroke-width="1.5"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </div>`;
+    d.addEventListener('click', () => openLb(i));
+    d.querySelector('.item-expand').addEventListener('click', e => { e.stopPropagation(); openLb(i); });
+    grid.appendChild(d);
+  });
+  // re-bind cursor hover for new items
+  bindCursorHover();
+}
+
+renderGallery(projects);
+
+// ── FILTER ────────────────────────────────────────────────
+function filterToCategory(cat){
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === cat);
+  });
+  filtered = cat === 'all' ? [...projects] : projects.filter(p => p.cat === cat);
+  const grid = document.getElementById('galleryGrid');
+  grid.style.opacity = '0'; grid.style.transform = 'translateY(10px)';
+  setTimeout(() => {
+    renderGallery(filtered);
+    requestAnimationFrame(() => {
+      grid.style.transition = 'opacity .35s, transform .35s';
+      grid.style.opacity = '1'; grid.style.transform = 'translateY(0)';
+    });
+  }, 280);
+  document.getElementById('gallery-section').scrollIntoView({behavior:'smooth'});
+}
+
+document.querySelectorAll('.cat-btn').forEach(btn => {
+  btn.addEventListener('click', () => filterToCategory(btn.dataset.cat));
+});
+
+// ── LIGHTBOX ──────────────────────────────────────────────
+const lb = document.getElementById('lightbox');
+
+function openLb(idx){
+  currentIdx = idx;
+  const p = filtered[idx];
+  const img = document.getElementById('lbImg');
+  img.style.opacity = '0';
+  img.src = gdUrl(p.id);
+  img.onload = () => { img.style.transition = 'opacity .3s'; img.style.opacity = '1'; };
+  document.getElementById('lbTag').textContent = p.catLabel;
+  document.getElementById('lbTitle').textContent = p.title;
+  document.getElementById('lbCounter').textContent = `${idx+1} / ${filtered.length}`;
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLb(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+function lbNav(d){ currentIdx = (currentIdx+d+filtered.length)%filtered.length; openLb(currentIdx); }
+
+document.getElementById('lbBg').addEventListener('click', closeLb);
+document.getElementById('lbClose').addEventListener('click', closeLb);
+document.getElementById('lbPrev').addEventListener('click', e => { e.stopPropagation(); lbNav(-1); });
+document.getElementById('lbNext').addEventListener('click', e => { e.stopPropagation(); lbNav(1); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key==='Escape') closeLb();
+  if (e.key==='ArrowLeft') lbNav(-1);
+  if (e.key==='ArrowRight') lbNav(1);
+});
+let tx=0;
+lb.addEventListener('touchstart', e => tx=e.touches[0].clientX, {passive:true});
+lb.addEventListener('touchend', e => { if(Math.abs(e.changedTouches[0].clientX-tx)>50) lbNav(e.changedTouches[0].clientX<tx?1:-1); });
+
+// ── CURSOR ────────────────────────────────────────────────
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0, my=0, rx=0, ry=0;
+
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left = mx+'px'; cur.style.top = my+'px';
+});
+(function loop(){ rx+=(mx-rx)*.13; ry+=(my-ry)*.13; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+
+function bindCursorHover(){
+  document.querySelectorAll('a,button,.gallery-item,.cat-btn,.service-item').forEach(el => {
+    el.addEventListener('mouseenter', ()=>{ cur.classList.add('h'); ring.classList.add('h'); });
+    el.addEventListener('mouseleave', ()=>{ cur.classList.remove('h'); ring.classList.remove('h'); });
+  });
+}
+bindCursorHover();
+
+// ── SCROLL FADE ───────────────────────────────────────────
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, {threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+// ── HERO PARALLAX ─────────────────────────────────────────
+document.addEventListener('mousemove', e => {
+  const p = document.querySelector('.hero-photo');
+  if(!p) return;
+  const x = (e.clientX/window.innerWidth-.5)*8;
+  const y = (e.clientY/window.innerHeight-.5)*8;
+  p.style.transform = `scale(1.05) translate(${x*.4}px,${y*.4}px)`;
+});
+</script>
+</body>
+</html>
