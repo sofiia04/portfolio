@@ -276,6 +276,25 @@ nav {
 .item-expand svg { width:15px; height:15px; stroke:var(--white); fill:none; }
 .item-expand:hover svg { stroke:var(--bg); }
 
+/* video play badge */
+.video-badge {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:56px; height:56px;
+  background:rgba(14,18,16,.75);
+  border:2px solid var(--green);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--green);
+  pointer-events:none;
+  transition:background .3s, transform .3s;
+}
+.gallery-item:hover .video-badge {
+  background:var(--green);
+  color:var(--bg);
+  transform:translate(-50%,-50%) scale(1.12);
+}
+
 /* ── LIGHTBOX ── */
 .lightbox {
   position:fixed; inset:0; z-index:1000;
@@ -842,8 +861,8 @@ const projects = [
   { id:'1QwZnTgdVGCIU-ZYsF-k7daCSsboaHjnh', cat:'3d', catLabel:'3D', title:'Rzeźba Cyfrowa' },
   { id:'1u8nRz-ebnttP_M1B_E7HLwAkbH8CMj4O', cat:'3d', catLabel:'3D', title:'Struktura Modularna' },
   { id:'1Pc9um7JygcUSGXa61KlJbt61BVXEW88y', cat:'3d', catLabel:'3D', title:'Projekt Koncepcyjny 3D' },
-  { id:'1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa I' },
-  { id:'11RVgCsmlIzhi0ir-K9cHyuDIatCKA0v_', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa II' },
+  { id:'1AU22vQWhmPvYcJJZmtlYybrWzKE_mreA', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa I', type:'video' },
+  { id:'11RVgCsmlIzhi0ir-K9cHyuDIatCKA0v_', cat:'animacja', catLabel:'Animacja', title:'Animacja Poklatkowa II', type:'video' },
   { id:'1Oim3JB30MTGw29wJ7_MxBJhjI_m3swsY', cat:'digital', catLabel:'Digital', title:'Portret Ekspresyjny' },
   { id:'1RRlhHzSjX8JqKiGrrXVWmvbpVzcWXAyz', cat:'digital', catLabel:'Digital', title:'Ilustracja Narracyjna' },
   { id:'15DjwvwJg8z3S0sgf-5tISYBulNWoZgnS', cat:'digital', catLabel:'Digital', title:'Postać Fantastyczna' },
@@ -934,8 +953,10 @@ function renderGallery(items){
   items.forEach((p,i) => {
     const d = document.createElement('div');
     d.className = 'gallery-item';
+    const isVideo = p.type === 'video';
     d.innerHTML = `
       <img src="${gdUrl(p.id)}" alt="${p.title}" loading="lazy">
+      ${isVideo ? `<div class="video-badge"><svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><polygon points="5,3 19,12 5,21"/></svg></div>` : ''}
       <div class="gallery-overlay">
         <div class="item-cat">${p.catLabel}</div>
         <div class="item-title">${p.title}</div>
@@ -947,7 +968,6 @@ function renderGallery(items){
     d.querySelector('.item-expand').addEventListener('click', e => { e.stopPropagation(); openLb(i); });
     grid.appendChild(d);
   });
-  // re-bind cursor hover for new items
   bindCursorHover();
 }
 
@@ -981,17 +1001,41 @@ const lb = document.getElementById('lightbox');
 function openLb(idx){
   currentIdx = idx;
   const p = filtered[idx];
+  const wrap = document.querySelector('.lb-img-wrap');
+  // clear previous content (remove iframe if existed)
+  const oldIframe = wrap.querySelector('iframe');
+  if(oldIframe) oldIframe.remove();
   const img = document.getElementById('lbImg');
-  img.style.opacity = '0';
-  img.src = gdUrl(p.id);
-  img.onload = () => { img.style.transition = 'opacity .3s'; img.style.opacity = '1'; };
+
+  if(p.type === 'video'){
+    img.style.display = 'none';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://drive.google.com/file/d/${p.id}/preview`;
+    iframe.allow = 'autoplay';
+    iframe.setAttribute('allowfullscreen','');
+    iframe.style.cssText = 'display:block;width:70vw;max-width:900px;height:calc(70vw * 9/16);max-height:80vh;border:none;outline:1px solid rgba(107,191,114,.15);';
+    wrap.insertBefore(iframe, img);
+  } else {
+    img.style.display = 'block';
+    img.style.opacity = '0';
+    img.src = gdUrl(p.id);
+    img.onload = () => { img.style.transition = 'opacity .3s'; img.style.opacity = '1'; };
+  }
+
   document.getElementById('lbTag').textContent = p.catLabel;
   document.getElementById('lbTitle').textContent = p.title;
   document.getElementById('lbCounter').textContent = `${idx+1} / ${filtered.length}`;
   lb.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-function closeLb(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+
+function closeLb(){
+  lb.classList.remove('open');
+  document.body.style.overflow = '';
+  // stop video on close
+  const iframe = document.querySelector('.lb-img-wrap iframe');
+  if(iframe) { iframe.src = iframe.src; } // reload src stops playback
+}
 function lbNav(d){ currentIdx = (currentIdx+d+filtered.length)%filtered.length; openLb(currentIdx); }
 
 document.getElementById('lbBg').addEventListener('click', closeLb);
